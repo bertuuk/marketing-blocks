@@ -33,10 +33,6 @@
       "type": "string",
       "default": "Send"
     },
-    "preventRedirect": {
-      "type": "boolean",
-      "default": "true"
-    },
     "termsAndConditionsText": {
       "type": "string",
       "default": "Acepto la política de privacidad y los términos de uso"
@@ -44,6 +40,10 @@
     "destinationUrl": {
       "type": "string",
       "default": ""
+    },
+    "hasRowAlign": {
+      "type": "boolean",
+      "default": "true"
     }
   }
 }

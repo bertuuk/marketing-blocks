@@ -77,7 +77,6 @@
     border-bottom: 2px solid #1F1F1F;
   }
   .lead-mail-form .form-group input[type=submit] {
-    width: auto;
     padding: 0.5rem 2rem;
   }
 }
@@ -114,25 +113,25 @@
 
 /* Estilos para desktop */
 @media (min-width: 960px) {
-  .lead-mail-form .form-group__first {
+  .lead-mail-form:not([data-rowalign=false]) .form-group__first {
     grid-template-columns: 1fr auto;
     /* Dos columnas: input en la primera, botón en la segunda */
     grid-template-rows: auto auto;
     /* Dos filas */
   }
-  .lead-mail-form .form-field__email {
+  .lead-mail-form:not([data-rowalign=false]) .form-field__email {
     grid-column: 1/2;
     /* El input de email ocupa la primera columna */
     grid-row: 1/2;
     /* Primera fila */
   }
-  .lead-mail-form .form-field__terms-conditions {
+  .lead-mail-form:not([data-rowalign=false]) .form-field__terms-conditions {
     grid-column: 1/-1;
     /* Checkbox ocupa ambas columnas */
     grid-row: 2/3;
     /* Segunda fila */
   }
-  .lead-mail-form .form-field__submit-button {
+  .lead-mail-form:not([data-rowalign=false]) .form-field__submit-button {
     grid-column: 2/3;
     /* El botón de envío ocupa la segunda columna */
     grid-row: 1/2;
