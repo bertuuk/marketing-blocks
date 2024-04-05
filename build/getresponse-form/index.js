@@ -88,7 +88,9 @@ function Edit({
     inputLabel,
     buttonLabel,
     destinationUrl,
-    termsAndConditionsText
+    termsAndConditionsText,
+    hasRowAlign,
+    RowAlign
   } = attributes;
 
   // Handler functions for attribute changes
@@ -117,6 +119,11 @@ function Edit({
       termsAndConditionsText: newTermsAndConditionsText
     });
   };
+  const onChangeRowAlign = newRowAlign => {
+    setAttributes({
+      hasRowAlign: newRowAlign
+    });
+  };
 
   // Add similar handler functions for other attributes like buttonLabel, preventRedirect, etc.
 
@@ -125,10 +132,13 @@ function Edit({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelBody, {
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Configuración del Bloque", "getresponse-form-block"),
     initialOpen: true
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelRow, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.TextControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Token de Campaña", "getresponse-form-block"),
-    value: campaignToken,
-    onChange: onChangeCampaignToken
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelRow, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.ToggleControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Alineación", "getresponse-form-block"),
+    help: hasRowAlign ? 'Has row align.' : 'Has column align.',
+    checked: hasRowAlign,
+    onChange: () => setAttributes({
+      hasRowAlign: !hasRowAlign
+    })
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelRow, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.TextControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Texto del input", "getresponse-form-block"),
     value: inputLabel,
@@ -141,6 +151,10 @@ function Edit({
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Confirmación", "getresponse-form-block"),
     initialOpen: false
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelRow, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Token de Campaña", "getresponse-form-block"),
+    value: campaignToken,
+    onChange: onChangeCampaignToken
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelRow, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.TextControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Términos y política de privacidad", "getresponse-form-block"),
     value: termsAndConditionsText,
     onChange: onChangeTermsAndConditionsText
@@ -148,7 +162,27 @@ function Edit({
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("URL de destino", "getresponse-form-block"),
     value: destinationUrl,
     onChange: onChangeDestinationUrl
-  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Hello World ", buttonLabel, " and ", campaignToken, "  "));
+  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    class: "lead-mail-form",
+    "data-rowalign": hasRowAlign,
+    id: uniqueId
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    class: "form-group form-group__first"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    class: "form-field form-field__email alone-input-email hidden-label__field"
+  }, inputLabel, ":"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    class: "form-field form-field__terms-conditions"
+  }, "\u25A2 ", termsAndConditionsText), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    class: "form-field form-field__submit-button"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    class: "g-recaptcha",
+    "data-callback": "onSubmit",
+    "data-action": "submit",
+    "data-id": uniqueId,
+    "data-sitekey": "6LcFAcMUAAAAAJLFEF2PLqrNTh88qBoWzBQbJ4dP",
+    type: "submit",
+    value: buttonLabel || 'Enviar'
+  })))));
 }
 
 /***/ }),
@@ -253,7 +287,8 @@ function save({
     inputLabel,
     buttonLabel,
     destinationUrl,
-    termsAndConditionsText
+    termsAndConditionsText,
+    hasRowAlign
   } = attributes;
   let inputId = 'alone-input-email_' + uniqueId;
   let checkboxId = 'terms-conditions_' + uniqueId;
@@ -261,6 +296,7 @@ function save({
     ..._wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save()
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
     class: "lead-mail-form",
+    "data-rowalign": hasRowAlign,
     action: "https://app.getresponse.com/add_subscriber.html",
     "accept-charset": "utf-8",
     method: "post",
@@ -410,7 +446,7 @@ module.exports = window["wp"]["i18n"];
   \*****************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/getresponse-form-block","version":"0.1.0","title":"Getresponse Form Block","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"getresponse-form-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","attributes":{"uniqueId":{"type":"string","default":""},"campaignToken":{"type":"string","default":"fVRGY"},"inputLabel":{"type":"string","default":"E-mail"},"buttonLabel":{"type":"string","default":"Send"},"preventRedirect":{"type":"boolean","default":"true"},"termsAndConditionsText":{"type":"string","default":"Acepto la política de privacidad y los términos de uso"},"destinationUrl":{"type":"string","default":""}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/getresponse-form-block","version":"0.1.0","title":"Getresponse Form Block","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"getresponse-form-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","attributes":{"uniqueId":{"type":"string","default":""},"campaignToken":{"type":"string","default":"fVRGY"},"inputLabel":{"type":"string","default":"E-mail"},"buttonLabel":{"type":"string","default":"Send"},"termsAndConditionsText":{"type":"string","default":"Acepto la política de privacidad y los términos de uso"},"destinationUrl":{"type":"string","default":""},"hasRowAlign":{"type":"boolean","default":"true"}}}');
 
 /***/ })
 

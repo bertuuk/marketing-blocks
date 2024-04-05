@@ -18,13 +18,13 @@ import { useBlockProps } from '@wordpress/block-editor';
  */
 export default function save({ attributes }) {
 	// Extracting attributes for use in the block
-	const { uniqueId, campaignToken, inputLabel, buttonLabel, destinationUrl, termsAndConditionsText } = attributes;
+	const { uniqueId, campaignToken, inputLabel, buttonLabel, destinationUrl, termsAndConditionsText, hasRowAlign } = attributes;
 	let inputId = 'alone-input-email_' + uniqueId;
 	let checkboxId = 'terms-conditions_' + uniqueId;
 
 	return (
 		<div {...useBlockProps.save()}>
-			<form class="lead-mail-form" action="https://app.getresponse.com/add_subscriber.html" accept-charset="utf-8" method="post" id={uniqueId}>
+			<form class="lead-mail-form" data-rowalign={hasRowAlign} action="https://app.getresponse.com/add_subscriber.html" accept-charset="utf-8" method="post" id={uniqueId}>
 				<div class="form-group form-group__first">
 					{/* Email input field (required) */}
 					<div class="form-field form-field__email alone-input-email hidden-label__field">
