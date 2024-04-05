@@ -1,0 +1,23 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-create-block-latarambana-blocks {
+	background-color: #21759b;
+	color: #fff;
+	padding: 2px;
+}
+
+.tarambana-list-extended{
+	> li{
+		display:flex;
+		&::before{
+			content:'➜ ';
+			color: inherit;
+		}
+	}
+	
+}
