@@ -322,6 +322,10 @@ function save({
     type: "hidden",
     name: "thankyou_url",
     value: destinationUrl
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "hidden",
+    name: "start_day",
+    value: "0"
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     class: "form-field form-field__terms-conditions"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {

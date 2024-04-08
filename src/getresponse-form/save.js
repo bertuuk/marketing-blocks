@@ -37,6 +37,7 @@ export default function save({ attributes }) {
 						{/* Conditional rendering based on the preventRedirect attribute */}
 
 						<input type="hidden" name="thankyou_url" value={destinationUrl} />
+						<input type="hidden" name="start_day" value="0" />
 					</div>
 					{/* Submit button */}
 					<div class="form-field form-field__terms-conditions">
