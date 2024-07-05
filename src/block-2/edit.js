@@ -33,8 +33,8 @@ export default function Edit() {
 	return (
 		<p { ...useBlockProps() }>
 			{ __(
-				'Latarambana Blocks – hello from the editor!',
-				'latarambana-blocks'
+				'littledaisy Blocks – hello from the editor!',
+				'littledaisy-blocks'
 			) }
 		</p>
 	);

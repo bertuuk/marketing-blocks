@@ -11,6 +11,8 @@ $color-white: #ffffff;
 $color-grey-30: #F5F5F5;
 $color-grey-50: #E2E2E2;
 $color-grey-80: #484848;
+$color-error-dark: #ab0808;
+$color-error-light: #f8cdcf;
 $extraLargeDevices: 1140px;
 $largeDevices: 960px;
 $mediumDevices: 720px;
@@ -34,7 +36,7 @@ $smallDevices: 540px;
 
 
 .wp-block-create-block-getresponse-form-block {
-	color: #000000;
+	color: $color-black;
 	padding: 2px;
 }
 
@@ -51,6 +53,7 @@ $smallDevices: 540px;
 
 			input {
 				width: 100%;
+
 			}
 		}
 
@@ -66,6 +69,10 @@ $smallDevices: 540px;
 			background-color: transparent;
 			box-sizing: border-box;
 
+			&.error {
+				border: 1px solid $color-error-dark;
+			}
+
 			&[type="text"] {
 				border: 1px solid$color-black;
 			}
@@ -75,12 +82,14 @@ $smallDevices: 540px;
 				text-transform: uppercase;
 				letter-spacing: .5px;
 				color: $color-white;
-				border: 1px solid$color-black;
+				border: 1px solid $color-black;
 				font-weight: 700;
 				transition: all .2s;
 
 				&:hover {
-					background-color: $color-primary;
+					background-color: $color-white;
+					color: $color-black;
+					border-color: $color-black;
 
 				}
 
@@ -104,7 +113,7 @@ $smallDevices: 540px;
 
 				&[type="text"] {
 					border: none;
-					border-bottom: 2px solid$color-black;
+					border-bottom: 2px solid $color-black;
 				}
 
 				&[type="submit"] {
@@ -113,45 +122,90 @@ $smallDevices: 540px;
 			}
 		}
 	}
-}
 
-
-.lead-mail-form .form-group__first {
-	display: grid;
-	grid-template-columns: 1fr;
-	/* Disposición en una sola columna para móviles */
-	gap: 10px 0;
-	/* Espaciado entre filas */
-}
-
-.lead-mail-form .form-field {
-	display: flex;
-	align-items: flex-start;
-
-}
-
-.lead-mail-form .form-field__hidden-fields {
-	display: none;
-}
-
-.lead-mail-form .form-field__submit-button {
-	input {
-		width: 100%;
+	.form-group__first {
+		display: grid;
+		grid-template-columns: 1fr;
+		/* Disposición en una sola columna para móviles */
+		gap: 10px 0;
+		/* Espaciado entre filas */
 	}
-}
 
-.lead-mail-form .form-field__terms-conditions {
-	input {
-		margin-top: .2rem;
+	.form-field {
+		display: flex;
+		align-items: flex-start;
 
 	}
 
-	label {
-		color: $color-grey-80;
-		font-size: .9rem;
-		padding-left: .3em;
+	.form-field__hidden-fields {
+		display: none;
+	}
+
+	.form-field__submit-button {
+		input {
+			width: 100%;
+		}
+	}
+
+	.form-field__terms-conditions {
+		input {
+			margin-top: .2rem;
+
+		}
+
+		label {
+			color: $color-grey-80;
+			font-size: .9rem;
+			padding-left: .3em;
+		}
+	}
+
+	&[data-darktheme="false"] {
+		.form-group {
+			input {
+				&[type="text"] {
+					border: 1px solid $color-white;
+				}
+
+				&[type="submit"] {
+					background-color: $color-white;
+					color: $color-black;
+					border: 1px solid $color-white;
+
+					&:hover {
+						background-color: $color-black;
+						color: $color-white;
+						border-color: $color-white;
+					}
+
+					&:focus {
+						outline: 2px solid $color-white;
+					}
+				}
+			}
+
+			@media (min-width: $largeDevices) {
+				input {
+					&[type="text"] {
+						border-bottom: 2px solid $color-white;
+					}
+				}
+			}
+		}
+
+		.form-field__terms-conditions {
+			label {
+				color: $color-grey-30;
+
+			}
+		}
+
+
 	}
 }
+
+
+
 
 /* Estilos para desktop */
 @media (min-width: $largeDevices) {
@@ -185,4 +239,22 @@ $smallDevices: 540px;
 		}
 	}
 
+}
+
+.lead-mail-form {
+	.form-error-message {
+		border: $color-error-dark;
+		background-color: $color-error-light;
+		color: $color-error-dark;
+		padding: .5rem;
+		width: fit-content;
+		max-width: 100%;
+		border-radius: 3px;
+	}
+
+	input {
+		&.error {
+			border-color: 1px solid $color-error-dark;
+		}
+	}
 }
