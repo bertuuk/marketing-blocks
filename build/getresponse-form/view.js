@@ -12,14 +12,16 @@ function getTranslatedMessages() {
       termsRequired: 'Si no aceptas los términos y condiciones no podremos seguir en contacto.',
       suspiciousActivity: 'Se ha detectado actividad sospechosa. Inténtalo de nuevo.',
       formTooFast: 'Error. Espera unos segundos y vuelve a enviar el formulario.',
-      recaptchaError: 'Error al validar el reCAPTCHA. Por favor, inténtalo de nuevo.'
+      recaptchaError: 'Error al validar el reCAPTCHA. Por favor, inténtalo de nuevo.',
+      validationError: 'Error al validar el envio del formulario'
     },
     ca: {
       emailRequired: 'No oblidis omplir el camp e-mail.',
       termsRequired: 'Si no acceptes els termes i condicions no podrem seguir en contacte.',
       suspiciousActivity: 'S\'ha detectat activitat sospitosa. Torna-ho a intentar.',
       formTooFast: 'Error. Espera uns segons i torna a enviar el formulari.',
-      recaptchaError: 'Error en validar el reCAPTCHA. Si us plau, torneu-ho a intentar.'
+      recaptchaError: 'Error en validar el reCAPTCHA. Si us plau, torneu-ho a intentar.',
+      validationError: 'Error en validar l\'enviament del formulari'
     }
   };
   return messages[lang] || messages['es'];
@@ -49,6 +51,27 @@ function validateUserTraps(form) {
     errors.push(messages.formTooFast);
   }
   return errors;
+}
+async function validateFieldsAndTrapsOnServer(formData) {
+  try {
+    const response = await fetch('/wp-json/custom/v1/validate-fields-and-traps', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    });
+    if (!response.ok) {
+      throw new Error('Error en la solicitud: ' + response.statusText);
+    }
+    const data = await response.json();
+    return data; // Devolver los datos completos de la respuesta
+  } catch (error) {
+    return {
+      success: false,
+      reason: messages.validationError
+    };
+  }
 }
 async function validateRecaptchaOnServer(token) {
   try {
@@ -81,7 +104,7 @@ function showError(message, form) {
     errorDiv.className = 'form-error-message';
     form.appendChild(errorDiv);
   }
-  errorDiv.textContent = message + form.id;
+  errorDiv.textContent = message;
 
   // Agregar clase de error a los campos relevantes
   form.querySelectorAll('input').forEach(input => {
@@ -141,16 +164,29 @@ window.onSubmit = function (token, activeSubmitButton) {
       const formData = new FormData(form);
       formData.append('token', token);
 
-      // Valida el token de reCAPTCHA en el servidor
-      validateRecaptchaOnServer(token).then(response => {
+      // Convertir FormData a JSON
+      const formDataJSON = {};
+      formData.forEach((value, key) => {
+        formDataJSON[key] = value;
+      });
+      console.log(formDataJSON); // Registrar para verificar los datos
+      validateFieldsAndTrapsOnServer(formDataJSON).then(response => {
         if (response.success) {
-          form.submit();
-        } else {
-          showError(response.reason, form);
+          validateRecaptchaOnServer(token).then(response => {
+            if (response.success) {
+              form.submit();
+            } else {
+              showError(response.reason, form);
+            }
+          }).catch(() => {
+            showError(recaptchaError, form);
+          });
         }
       }).catch(() => {
-        showError('Error al validar reCAPTCHA. Por favor, inténtelo de nuevo.', form);
+        showError(validationError, form);
       });
+
+      // Valida el token de reCAPTCHA en el servidor
     }
   }
 };
