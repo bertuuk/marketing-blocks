@@ -1,9 +1,9 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "create-block/latarambana-blocks",
+  "name": "create-block/littledaisy-blocks",
   "version": "0.1.0",
-  "title": "Latarambana Blocks",
+  "title": "littledaisy Blocks",
   "category": "widgets",
   "icon": "smiley",
   "description": "Example block scaffolded with Create Block tool.",
@@ -11,7 +11,7 @@
   "supports": {
     "html": false
   },
-  "textdomain": "latarambana-blocks",
+  "textdomain": "littledaisy-blocks",
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",
   "style": "file:./style-index.css",

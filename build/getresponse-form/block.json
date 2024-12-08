@@ -44,6 +44,10 @@
     "hasRowAlign": {
       "type": "boolean",
       "default": "true"
+    },
+    "recaptchaKey": {
+      "type": "string",
+      "default": ""
     }
   }
 }

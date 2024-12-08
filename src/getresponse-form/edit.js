@@ -40,17 +40,20 @@ import './editor.scss';
  */
 export default function Edit({ attributes, setAttributes }) {
 	const instanceId = useInstanceId(Edit);
-	const { uniqueId } = 'attributes';
+    const { uniqueId } = 'attributes';
 
-	useEffect(() => {
-		if (!uniqueId) {
-			// Asigna un ID único basado en instanceId
-			setAttributes({ uniqueId: `getresponse-form-${instanceId}` });
-		}
-	}, [uniqueId, setAttributes]);
+    // Genera un número aleatorio entre 0 y 1000000
+    const randomNumber = Math.floor(Math.random() * 1000000);
+
+    useEffect(() => {
+        if (!uniqueId) {
+            // Asigna un ID único basado en uniqueInstanceId
+            setAttributes({ uniqueId: `getresponse-form-${instanceId}-${randomNumber}` });
+        }
+    }, [uniqueId, setAttributes]);
 	// Extracting attributes and setAttributes function from props
 	// preventRedirect, confirmationMessage, destinationUrl		
-	const { campaignToken, inputLabel, buttonLabel, destinationUrl, termsAndConditionsText, hasRowAlign, RowAlign } = attributes;
+	const { campaignToken, inputLabel, buttonLabel, destinationUrl, termsAndConditionsText, hasRowAlign, RowAlign, hasDarkTheme, recaptchaKey } = attributes;
 
 	// Handler functions for attribute changes
 	const onChangeCampaignToken = (value) => {
@@ -85,6 +88,16 @@ export default function Edit({ attributes, setAttributes }) {
 			hasRowAlign: newRowAlign,
 		});
 	};
+	const onChangeDarkTheme = (newDarkTheme) => {
+		setAttributes({
+			hasDarkTheme: newDarkTheme,
+		});
+	};
+	const onChangeRecaptchaKey = (newRecaptchaKey) => {
+		setAttributes({
+			recaptchaKey: newRecaptchaKey,
+		});
+	};
 
 	// Add similar handler functions for other attributes like buttonLabel, preventRedirect, etc.
 
@@ -106,6 +119,18 @@ export default function Edit({ attributes, setAttributes }) {
 							}
 							checked={hasRowAlign}
 							onChange={() => setAttributes({ hasRowAlign: !hasRowAlign })}
+						/>
+					</PanelRow>
+					<PanelRow>
+						<ToggleControl
+							label={__("Color", "getresponse-form-block")}
+							help={
+								hasDarkTheme
+									? 'Dark color'
+									: 'Light color'
+							}
+							checked={hasDarkTheme}
+							onChange={() => setAttributes({ hasDarkTheme: !hasDarkTheme })}
 						/>
 					</PanelRow>
 					<PanelRow>
@@ -148,9 +173,16 @@ export default function Edit({ attributes, setAttributes }) {
 							onChange={onChangeDestinationUrl}
 						/>
 					</PanelRow>
+					<PanelRow>
+						<TextControl
+							label={__("Clave Recaptcha", "getresponse-form-block")}
+							value={recaptchaKey}
+							onChange={onChangeRecaptchaKey}
+						/>
+					</PanelRow>
 				</PanelBody>
 			</InspectorControls>
-			<div class="lead-mail-form" data-rowalign={hasRowAlign} id={uniqueId}>
+			<div class="lead-mail-form" data-rowalign={hasRowAlign} data-darktheme={hasDarkTheme} id={uniqueId}>
 				<div class="form-group form-group__first">
 					{/* Email input field (required) */}
 					<div class="form-field form-field__email alone-input-email hidden-label__field">
@@ -162,7 +194,7 @@ export default function Edit({ attributes, setAttributes }) {
 						▢ {termsAndConditionsText}
 					</div>
 					<div class="form-field form-field__submit-button">
-						<input class="g-recaptcha" data-callback='onSubmit' data-action='submit' data-id={uniqueId} data-sitekey="6LcFAcMUAAAAAJLFEF2PLqrNTh88qBoWzBQbJ4dP" type="submit" value={buttonLabel || 'Enviar'} />
+						<input class="g-recaptcha" data-callback='onSubmit' data-action='submit' data-id={uniqueId} data-sitekey={recaptchaKey} type="submit" value={buttonLabel || 'Enviar'} />
 					</div>
 				</div>
 			</div>

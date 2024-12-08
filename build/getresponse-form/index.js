@@ -73,11 +73,14 @@ function Edit({
   const {
     uniqueId
   } = 'attributes';
+
+  // Genera un número aleatorio entre 0 y 1000000
+  const randomNumber = Math.floor(Math.random() * 1000000);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useEffect)(() => {
     if (!uniqueId) {
-      // Asigna un ID único basado en instanceId
+      // Asigna un ID único basado en uniqueInstanceId
       setAttributes({
-        uniqueId: `getresponse-form-${instanceId}`
+        uniqueId: `getresponse-form-${instanceId}-${randomNumber}`
       });
     }
   }, [uniqueId, setAttributes]);
@@ -90,7 +93,9 @@ function Edit({
     destinationUrl,
     termsAndConditionsText,
     hasRowAlign,
-    RowAlign
+    RowAlign,
+    hasDarkTheme,
+    recaptchaKey
   } = attributes;
 
   // Handler functions for attribute changes
@@ -124,6 +129,16 @@ function Edit({
       hasRowAlign: newRowAlign
     });
   };
+  const onChangeDarkTheme = newDarkTheme => {
+    setAttributes({
+      hasDarkTheme: newDarkTheme
+    });
+  };
+  const onChangeRecaptchaKey = newRecaptchaKey => {
+    setAttributes({
+      recaptchaKey: newRecaptchaKey
+    });
+  };
 
   // Add similar handler functions for other attributes like buttonLabel, preventRedirect, etc.
 
@@ -138,6 +153,13 @@ function Edit({
     checked: hasRowAlign,
     onChange: () => setAttributes({
       hasRowAlign: !hasRowAlign
+    })
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelRow, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.ToggleControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Color", "getresponse-form-block"),
+    help: hasDarkTheme ? 'Dark color' : 'Light color',
+    checked: hasDarkTheme,
+    onChange: () => setAttributes({
+      hasDarkTheme: !hasDarkTheme
     })
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelRow, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.TextControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Texto del input", "getresponse-form-block"),
@@ -162,9 +184,14 @@ function Edit({
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("URL de destino", "getresponse-form-block"),
     value: destinationUrl,
     onChange: onChangeDestinationUrl
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelRow, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Clave Recaptcha", "getresponse-form-block"),
+    value: recaptchaKey,
+    onChange: onChangeRecaptchaKey
   })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     class: "lead-mail-form",
     "data-rowalign": hasRowAlign,
+    "data-darktheme": hasDarkTheme,
     id: uniqueId
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     class: "form-group form-group__first"
@@ -179,7 +206,7 @@ function Edit({
     "data-callback": "onSubmit",
     "data-action": "submit",
     "data-id": uniqueId,
-    "data-sitekey": "6LcFAcMUAAAAAJLFEF2PLqrNTh88qBoWzBQbJ4dP",
+    "data-sitekey": recaptchaKey,
     type: "submit",
     value: buttonLabel || 'Enviar'
   })))));
@@ -288,7 +315,9 @@ function save({
     buttonLabel,
     destinationUrl,
     termsAndConditionsText,
-    hasRowAlign
+    hasRowAlign,
+    hasDarkTheme,
+    recaptchaKey
   } = attributes;
   let inputId = 'alone-input-email_' + uniqueId;
   let checkboxId = 'terms-conditions_' + uniqueId;
@@ -297,6 +326,7 @@ function save({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
     class: "lead-mail-form",
     "data-rowalign": hasRowAlign,
+    "data-darktheme": hasDarkTheme,
     action: "https://app.getresponse.com/add_subscriber.html",
     "accept-charset": "utf-8",
     method: "post",
@@ -311,10 +341,25 @@ function save({
     type: "text",
     name: "email",
     placeholder: inputLabel,
-    id: inputId
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    id: inputId,
+    autocomplete: "email"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    class: "sr-only",
+    "aria-hidden": "true"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    for: `${inputId}-honeypot`
+  }, "Deja este campo vac\xEDo:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    id: `${inputId}-honeypot`,
+    type: "text",
+    name: "user_comment",
+    tabindex: "-1",
+    autocomplete: "off"
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     class: "form-field form-field__hidden-fields"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    name: "custom_url_seguimiento",
+    type: "text"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "hidden",
     name: "campaign_token",
     value: campaignToken
@@ -326,6 +371,10 @@ function save({
     type: "hidden",
     name: "start_day",
     value: "0"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "hidden",
+    name: "start_time",
+    id: "start_time"
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     class: "form-field form-field__terms-conditions"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
@@ -342,8 +391,8 @@ function save({
     "data-callback": "onSubmit",
     "data-action": "submit",
     "data-id": uniqueId,
-    "data-sitekey": "6LcFAcMUAAAAAJLFEF2PLqrNTh88qBoWzBQbJ4dP",
-    type: "submit",
+    "data-sitekey": recaptchaKey,
+    type: "button",
     value: buttonLabel || 'Enviar'
   })))));
 }
@@ -450,7 +499,7 @@ module.exports = window["wp"]["i18n"];
   \*****************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/getresponse-form-block","version":"0.1.0","title":"Getresponse Form Block","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"getresponse-form-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","attributes":{"uniqueId":{"type":"string","default":""},"campaignToken":{"type":"string","default":"fVRGY"},"inputLabel":{"type":"string","default":"E-mail"},"buttonLabel":{"type":"string","default":"Send"},"termsAndConditionsText":{"type":"string","default":"Acepto la política de privacidad y los términos de uso"},"destinationUrl":{"type":"string","default":""},"hasRowAlign":{"type":"boolean","default":"true"}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/getresponse-form-block","version":"0.1.0","title":"Getresponse Form Block","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"getresponse-form-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","attributes":{"uniqueId":{"type":"string","default":""},"campaignToken":{"type":"string","default":"fVRGY"},"inputLabel":{"type":"string","default":"E-mail"},"buttonLabel":{"type":"string","default":"Send"},"termsAndConditionsText":{"type":"string","default":"Acepto la política de privacidad y los términos de uso"},"destinationUrl":{"type":"string","default":""},"hasRowAlign":{"type":"boolean","default":"true"},"recaptchaKey":{"type":"string","default":""}}}');
 
 /***/ })
 
@@ -605,7 +654,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/tru
 /******/ 			return __webpack_require__.O(result);
 /******/ 		}
 /******/ 		
-/******/ 		var chunkLoadingGlobal = globalThis["webpackChunklatarambana_blocks"] = globalThis["webpackChunklatarambana_blocks"] || [];
+/******/ 		var chunkLoadingGlobal = globalThis["webpackChunklittledaisy_blocks"] = globalThis["webpackChunklittledaisy_blocks"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 	})();

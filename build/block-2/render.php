@@ -4,5 +4,5 @@
  */
 ?>
 <p <?php echo get_block_wrapper_attributes(); ?>>
-	<?php esc_html_e( 'Latarambana Blocks – hello from a dynamic block!', 'latarambana-blocks' ); ?>
+	<?php esc_html_e( 'littledaisy Blocks – hello from a dynamic block!', 'littledaisy-blocks' ); ?>
 </p>
