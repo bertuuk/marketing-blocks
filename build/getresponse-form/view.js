@@ -1,5 +1,4 @@
 /******/ (() => { // webpackBootstrap
-var __webpack_exports__ = {};
 /*!**************************************!*\
   !*** ./src/getresponse-form/view.js ***!
   \**************************************/
@@ -156,11 +155,23 @@ document.querySelectorAll('.g-recaptcha').forEach(button => {
     });
   });
 });
-window.onSubmit = function (token, activeSubmitButton) {
+window.onSubmit = function (token, activeSubmitButton, event) {
   if (activeSubmitButton) {
     const uniqueId = activeSubmitButton.getAttribute('data-id');
     const form = document.getElementById(uniqueId);
     if (form) {
+      const pageName = window.location.pathname;
+      // Asignar el nombre de la página al campo oculto
+      const pageNameInput = form.querySelector('input[name="custom_url_seguimiento"]');
+      if (pageNameInput) {
+        pageNameInput.value = pageName; // Actualizamos el valor
+      }
+      // Validar campos del formulario y trampas
+      const errors = validateFormFields(form).concat(validateUserTraps(form));
+      if (errors.length > 0) {
+        showError(errors.join(' '), form);
+        return; // Evitar que se continúe si hay errores
+      }
       const formData = new FormData(form);
       formData.append('token', token);
 
@@ -169,7 +180,6 @@ window.onSubmit = function (token, activeSubmitButton) {
       formData.forEach((value, key) => {
         formDataJSON[key] = value;
       });
-      console.log(formDataJSON); // Registrar para verificar los datos
       validateFieldsAndTrapsOnServer(formDataJSON).then(response => {
         if (response.success) {
           validateRecaptchaOnServer(token).then(response => {
@@ -181,6 +191,8 @@ window.onSubmit = function (token, activeSubmitButton) {
           }).catch(() => {
             showError(recaptchaError, form);
           });
+        } else {
+          showError(validationError, form);
         }
       }).catch(() => {
         showError(validationError, form);

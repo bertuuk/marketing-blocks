@@ -8,6 +8,21 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
+.sr-only {
+  border: 0 !important;
+  clip: rect(1px, 1px, 1px, 1px) !important;
+  /* 1 */
+  clip-path: inset(50%) !important;
+  /* 2 */
+  height: 1px !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  position: absolute !important;
+  width: 1px !important;
+  white-space: nowrap !important;
+}
+
 .wp-block-create-block-getresponse-form-block {
   color: #1F1F1F;
   padding: 2px;
@@ -28,7 +43,6 @@
   border: 0 !important;
   clip: rect(1px, 1px, 1px, 1px) !important;
   /* 1 */
-  -webkit-clip-path: inset(50%) !important;
   clip-path: inset(50%) !important;
   /* 2 */
   height: 1px !important;
@@ -51,7 +65,7 @@
 .lead-mail-form .form-group input[type=text] {
   border: 1px solid #1F1F1F;
 }
-.lead-mail-form .form-group input[type=submit] {
+.lead-mail-form .form-group input[type=button] {
   background-color: #1F1F1F;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -60,12 +74,12 @@
   font-weight: 700;
   transition: all 0.2s;
 }
-.lead-mail-form .form-group input[type=submit]:hover {
+.lead-mail-form .form-group input[type=button]:hover {
   background-color: #ffffff;
   color: #1F1F1F;
   border-color: #1F1F1F;
 }
-.lead-mail-form .form-group input[type=submit]:focus {
+.lead-mail-form .form-group input[type=button]:focus {
   outline: 2px solid #161d25;
   outline-offset: 2px;
 }
@@ -80,7 +94,7 @@
     border: none;
     border-bottom: 2px solid #1F1F1F;
   }
-  .lead-mail-form .form-group input[type=submit] {
+  .lead-mail-form .form-group input[type=button], .lead-mail-form .form-group input[type=button] {
     padding: 0.5rem 2rem;
   }
 }
@@ -112,17 +126,17 @@
 .lead-mail-form[data-darktheme=false] .form-group input[type=text] {
   border: 1px solid #ffffff;
 }
-.lead-mail-form[data-darktheme=false] .form-group input[type=submit] {
+.lead-mail-form[data-darktheme=false] .form-group input[type=button] {
   background-color: #ffffff;
   color: #1F1F1F;
   border: 1px solid #ffffff;
 }
-.lead-mail-form[data-darktheme=false] .form-group input[type=submit]:hover {
+.lead-mail-form[data-darktheme=false] .form-group input[type=button]:hover {
   background-color: #1F1F1F;
   color: #ffffff;
   border-color: #ffffff;
 }
-.lead-mail-form[data-darktheme=false] .form-group input[type=submit]:focus {
+.lead-mail-form[data-darktheme=false] .form-group input[type=button]:focus {
   outline: 2px solid #ffffff;
 }
 @media (min-width: 960px) {

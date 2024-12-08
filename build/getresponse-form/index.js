@@ -341,16 +341,25 @@ function save({
     type: "text",
     name: "email",
     placeholder: inputLabel,
-    id: inputId
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    id: inputId,
+    autocomplete: "email"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    class: "sr-only",
+    "aria-hidden": "true"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    for: `${inputId}-honeypot`
+  }, "Deja este campo vac\xEDo:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    id: `${inputId}-honeypot`,
     type: "text",
     name: "user_comment",
-    style: {
-      display: 'none'
-    }
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    tabindex: "-1",
+    autocomplete: "off"
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     class: "form-field form-field__hidden-fields"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    name: "custom_url_seguimiento",
+    type: "text"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "hidden",
     name: "campaign_token",
     value: campaignToken
@@ -383,7 +392,7 @@ function save({
     "data-action": "submit",
     "data-id": uniqueId,
     "data-sitekey": recaptchaKey,
-    type: "submit",
+    type: "button",
     value: buttonLabel || 'Enviar'
   })))));
 }

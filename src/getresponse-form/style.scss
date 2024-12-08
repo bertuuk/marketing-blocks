@@ -34,6 +34,10 @@ $smallDevices: 540px;
 	white-space: nowrap !important;
 }
 
+.sr-only{
+	@include visually-hidden;
+}
+
 
 .wp-block-create-block-getresponse-form-block {
 	color: $color-black;
@@ -77,7 +81,7 @@ $smallDevices: 540px;
 				border: 1px solid$color-black;
 			}
 
-			&[type="submit"] {
+			&[type="button"] {
 				background-color: $color-black;
 				text-transform: uppercase;
 				letter-spacing: .5px;
@@ -116,7 +120,7 @@ $smallDevices: 540px;
 					border-bottom: 2px solid $color-black;
 				}
 
-				&[type="submit"] {
+				&[type="button"], &[type="button"] {
 					padding: .5rem 2rem;
 				}
 			}
@@ -167,7 +171,7 @@ $smallDevices: 540px;
 					border: 1px solid $color-white;
 				}
 
-				&[type="submit"] {
+				&[type="button"] {
 					background-color: $color-white;
 					color: $color-black;
 					border: 1px solid $color-white;

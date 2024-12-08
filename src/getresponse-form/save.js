@@ -21,6 +21,7 @@ export default function save({ attributes }) {
 	const { uniqueId, campaignToken, inputLabel, buttonLabel, destinationUrl, termsAndConditionsText, hasRowAlign, hasDarkTheme, recaptchaKey } = attributes;
 	let inputId = 'alone-input-email_' + uniqueId;
 	let checkboxId = 'terms-conditions_' + uniqueId;
+	
 
 	return (
 		<div {...useBlockProps.save()}>
@@ -29,14 +30,17 @@ export default function save({ attributes }) {
 					{/* Email input field (required) */}
 					<div class="form-field form-field__email alone-input-email hidden-label__field">
 						<label for={inputId}>{inputLabel}:</label>
-						<input type="text" name="email" placeholder={inputLabel} id={inputId} />
-						<input type="text" name="user_comment" style={{ display: 'none' }} />
+						<input type="text" name="email" placeholder={inputLabel} id={inputId} autocomplete="email"/>
+						<div class="sr-only" aria-hidden="true">
+							<label for={`${inputId}-honeypot`}>Deja este campo vacío:</label>
+							<input id={`${inputId}-honeypot`} type="text" name="user_comment" tabindex="-1" autocomplete="off"/>
+						</div>
 					</div>
 					<div class="form-field form-field__hidden-fields">
+						<input name="custom_url_seguimiento" type="text" />
 						{/* Campaign token field */}
 						<input type="hidden" name="campaign_token" value={campaignToken} />
 						{/* Conditional rendering based on the preventRedirect attribute */}
-
 						<input type="hidden" name="thankyou_url" value={destinationUrl} />	
 						<input type="hidden" name="start_day" value="0" />
 						<input type="hidden" name="start_time" id="start_time"/>
@@ -48,7 +52,7 @@ export default function save({ attributes }) {
 						<label for={checkboxId}>{termsAndConditionsText}</label>
 					</div>
 					<div class="form-field form-field__submit-button">
-						<input class="g-recaptcha" data-callback='onSubmit' data-action='submit' data-id={uniqueId} data-sitekey={recaptchaKey} type="submit" value={buttonLabel || 'Enviar'} />
+						<input class="g-recaptcha" data-callback='onSubmit' data-action='submit' data-id={uniqueId} data-sitekey={recaptchaKey} type="button" value={buttonLabel || 'Enviar'} />
 					</div>
 				</div>
 			</form>
