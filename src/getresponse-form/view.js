@@ -173,7 +173,12 @@ window.onSubmit = function (token, activeSubmitButton, event) {
             // Asignar el nombre de la página al campo oculto
             const pageNameInput = form.querySelector('input[name="custom_url_seguimiento"]');
             if (pageNameInput) {
-                pageNameInput.value = pageName;  // Actualizamos el valor
+                if(pageNameInput.value.includes('http') ){
+                    showError(messages.suspiciousActivity, form)
+                    return;
+                }else{
+                    pageNameInput.value = pageName;  // Actualizamos el valor
+                }      
             }
             // Validar campos del formulario y trampas
             const errors = validateFormFields(form).concat(validateUserTraps(form));
