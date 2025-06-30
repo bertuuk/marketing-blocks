@@ -1,14 +1,14 @@
 <?php
 /**
- * Plugin Name:       Little Daisy Blocks
- * Description:       Guttenberg blocks for Tarambana Theme
- * Requires at least: 6.1
- * Requires PHP:      7.0
- * Version:           0.3.1
- * Author:            Berta
- * License:           GPL-2.0-or-later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       littledaisy-blocks
+ * Plugin Name: Marketing Blocks by Bertuuk
+ * Plugin URI: https://github.com/bertuuk/marketing-blocks
+ * Description: Custom Gutenberg blocks for marketing, including GetResponse forms.
+ * Author: Berta Nicolau
+ * Author URI: https://github.com/bertuuk
+ * Version: 1.0.0
+ * License: GPL2+
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
+ * Text Domain: bertuuk-marketing-blocks
  *
  * @package           create-block
  */
