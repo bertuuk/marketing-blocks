@@ -138,6 +138,7 @@ export default function Edit({ attributes, setAttributes }) {
 							label={__("Texto del input", "getresponse-form-block")}
 							value={inputLabel}
 							onChange={onChangeInputLabel}
+							__nextHasNoMarginBottom={true}
 						/>
 					</PanelRow>
 					<PanelRow>
@@ -145,6 +146,7 @@ export default function Edit({ attributes, setAttributes }) {
 							label={__("Texto del botón", "getresponse-form-block")}
 							value={buttonLabel}
 							onChange={onChangeButtonLabel}
+							__nextHasNoMarginBottom={true}
 						/>
 					</PanelRow>
 				</PanelBody>
@@ -157,6 +159,7 @@ export default function Edit({ attributes, setAttributes }) {
 							label={__("Token de Campaña", "getresponse-form-block")}
 							value={campaignToken}
 							onChange={onChangeCampaignToken}
+							__nextHasNoMarginBottom={true}
 						/>
 					</PanelRow>
 					<PanelRow>
@@ -164,6 +167,7 @@ export default function Edit({ attributes, setAttributes }) {
 							label={__("Términos y política de privacidad", "getresponse-form-block")}
 							value={termsAndConditionsText}
 							onChange={onChangeTermsAndConditionsText}
+							__nextHasNoMarginBottom={true}
 						/>
 					</PanelRow>
 					<PanelRow>
@@ -171,6 +175,7 @@ export default function Edit({ attributes, setAttributes }) {
 							label={__("URL de destino", "getresponse-form-block")}
 							value={destinationUrl}
 							onChange={onChangeDestinationUrl}
+							__nextHasNoMarginBottom={true}
 						/>
 					</PanelRow>
 					<PanelRow>
@@ -178,6 +183,7 @@ export default function Edit({ attributes, setAttributes }) {
 							label={__("Clave Recaptcha", "getresponse-form-block")}
 							value={recaptchaKey}
 							onChange={onChangeRecaptchaKey}
+							__nextHasNoMarginBottom={true}
 						/>
 					</PanelRow>
 				</PanelBody>

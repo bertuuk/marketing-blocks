@@ -21,6 +21,7 @@ export default function save({ attributes }) {
 	const { uniqueId, campaignToken, inputLabel, buttonLabel, destinationUrl, termsAndConditionsText, hasRowAlign, hasDarkTheme, recaptchaKey } = attributes;
 	let inputId = 'alone-input-email_' + uniqueId;
 	let checkboxId = 'terms-conditions_' + uniqueId;
+	let recaptchaScriptUrl = 'https://www.google.com/recaptcha/api.js?render=' + recaptchaKey;
 	
 
 	return (
@@ -56,6 +57,7 @@ export default function save({ attributes }) {
 					</div>
 				</div>
 			</form>
+			<script src={recaptchaScriptUrl}></script>
 		</div>
 
 	);
