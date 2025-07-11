@@ -107,8 +107,23 @@ export default function Edit({ attributes, setAttributes }) {
 		});
 	};
 
-	const inputTextColor = getReadableTextColor(attributes.inputBackgroundColor);
-	const buttonTextColor = getReadableTextColor(attributes.buttonBackgroundColor);
+/**
+ * useEffect to calculate and save inputTextColor and buttonTextColor
+ * whenever their background colors change.
+ */
+useEffect(() => {
+  const newInputTextColor = getReadableTextColor(attributes.inputBackgroundColor);
+  if (newInputTextColor !== attributes.inputTextColor) {
+    setAttributes({ inputTextColor: newInputTextColor });
+  }
+}, [attributes.inputBackgroundColor]);
+
+useEffect(() => {
+  const newButtonTextColor = getReadableTextColor(attributes.buttonBackgroundColor);
+  if (newButtonTextColor !== attributes.buttonTextColor) {
+    setAttributes({ buttonTextColor: newButtonTextColor });
+  }
+}, [attributes.buttonBackgroundColor]);
 
 	return (
 		<div {...useBlockProps()}>
@@ -233,7 +248,7 @@ export default function Edit({ attributes, setAttributes }) {
 					{/* Email input field (required) */}
 					<div class="form-field form-field__email alone-input-email hidden-label__field">
 						{inputLabel}:
-						<input style={{backgroundColor: attributes.inputBackgroundColor,color: inputTextColor}} type="text" name="email" autocomplete="email"/>
+						<input style={{backgroundColor: attributes.inputBackgroundColor,color: attributes.inputTextColor, borderColor: attributes.inputBorderColor}} type="text" name="email" autocomplete="email"/>
 					</div>
 
 					{/* Submit button */}
@@ -241,7 +256,7 @@ export default function Edit({ attributes, setAttributes }) {
 						▢ {termsAndConditionsText}
 					</div>
 					<div class="form-field form-field__submit-button">
-						<input style={{backgroundColor: attributes.buttonBackgroundColor,color: buttonTextColor}} class="g-recaptcha" data-callback='onSubmit' data-action='submit' data-id={uniqueId} data-sitekey={recaptchaKey} type="submit" value={buttonLabel || 'Enviar'} />
+						<input style={{backgroundColor: attributes.buttonBackgroundColor,color: attributes.buttonTextColor, borderColor: attributes.buttonBorderColor}} class="g-recaptcha" data-callback='onSubmit' data-action='submit' data-id={uniqueId} data-sitekey={recaptchaKey} type="submit" value={buttonLabel || 'Enviar'} />
 					</div>
 				</div>
 			</div>

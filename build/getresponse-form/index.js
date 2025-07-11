@@ -148,8 +148,27 @@ function Edit({
       recaptchaKey: newRecaptchaKey
     });
   };
-  const inputTextColor = (0,_utils_colors__WEBPACK_IMPORTED_MODULE_6__.getReadableTextColor)(attributes.inputBackgroundColor);
-  const buttonTextColor = (0,_utils_colors__WEBPACK_IMPORTED_MODULE_6__.getReadableTextColor)(attributes.buttonBackgroundColor);
+
+  /**
+   * useEffect to calculate and save inputTextColor and buttonTextColor
+   * whenever their background colors change.
+   */
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
+    const newInputTextColor = (0,_utils_colors__WEBPACK_IMPORTED_MODULE_6__.getReadableTextColor)(attributes.inputBackgroundColor);
+    if (newInputTextColor !== attributes.inputTextColor) {
+      setAttributes({
+        inputTextColor: newInputTextColor
+      });
+    }
+  }, [attributes.inputBackgroundColor]);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
+    const newButtonTextColor = (0,_utils_colors__WEBPACK_IMPORTED_MODULE_6__.getReadableTextColor)(attributes.buttonBackgroundColor);
+    if (newButtonTextColor !== attributes.buttonTextColor) {
+      setAttributes({
+        buttonTextColor: newButtonTextColor
+      });
+    }
+  }, [attributes.buttonBackgroundColor]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)(),
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
@@ -262,7 +281,8 @@ function Edit({
           children: [inputLabel, ":", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
             style: {
               backgroundColor: attributes.inputBackgroundColor,
-              color: inputTextColor
+              color: attributes.inputTextColor,
+              borderColor: attributes.inputBorderColor
             },
             type: "text",
             name: "email",
@@ -276,7 +296,8 @@ function Edit({
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
             style: {
               backgroundColor: attributes.buttonBackgroundColor,
-              color: buttonTextColor
+              color: attributes.buttonTextColor,
+              borderColor: attributes.buttonBorderColor
             },
             class: "g-recaptcha",
             "data-callback": "onSubmit",
@@ -424,7 +445,12 @@ function save({
             name: "email",
             placeholder: inputLabel,
             id: inputId,
-            autocomplete: "email"
+            autocomplete: "email",
+            style: {
+              backgroundColor: attributes.inputBackgroundColor,
+              color: attributes.inputTextColor,
+              borderColor: attributes.inputBorderColor
+            }
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
             class: "sr-only",
             "aria-hidden": "true",
@@ -467,7 +493,12 @@ function save({
             type: "checkbox",
             id: checkboxId,
             name: "terms-and-conditions",
-            required: true
+            required: true,
+            style: {
+              backgroundColor: attributes.inputBackgroundColor,
+              color: attributes.inputTextColor,
+              borderColor: attributes.inputBorderColor
+            }
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
             for: checkboxId,
             children: termsAndConditionsText
@@ -481,7 +512,12 @@ function save({
             "data-id": uniqueId,
             "data-sitekey": recaptchaKey,
             type: "button",
-            value: buttonLabel || 'Enviar'
+            value: buttonLabel || 'Enviar',
+            style: {
+              backgroundColor: attributes.buttonBackgroundColor,
+              color: attributes.buttonTextColor,
+              borderColor: attributes.buttonBorderColor
+            }
           })
         })]
       })
@@ -1829,7 +1865,7 @@ function validateWCAG2Parms(parms) {
   \*****************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/getresponse-form-block","version":"0.1.0","title":"Getresponse Form Block","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"getresponse-form-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","attributes":{"inputBackgroundColor":{"type":"string","default":"#ffffff"},"inputBorderColor":{"type":"string","default":"#000000"},"buttonBackgroundColor":{"type":"string","default":"#000000"},"buttonBorderColor":{"type":"string","default":"#000000"},"uniqueId":{"type":"string","default":""},"campaignToken":{"type":"string","default":"fVRGY"},"inputLabel":{"type":"string","default":"E-mail"},"buttonLabel":{"type":"string","default":"Send"},"termsAndConditionsText":{"type":"string","default":"Acepto la política de privacidad y los términos de uso"},"destinationUrl":{"type":"string","default":""},"hasRowAlign":{"type":"boolean","default":"true"},"recaptchaKey":{"type":"string","default":""}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/getresponse-form-block","version":"0.1.0","title":"Getresponse Form Block","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"getresponse-form-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","attributes":{"inputBackgroundColor":{"type":"string","default":"#ffffff"},"inputBorderColor":{"type":"string","default":"#000000"},"inputTextColor":{"type":"string","default":"#000000"},"buttonBackgroundColor":{"type":"string","default":"#000000"},"buttonBorderColor":{"type":"string","default":"#000000"},"buttonTextColor":{"type":"string","default":"#ffffff"},"uniqueId":{"type":"string","default":""},"campaignToken":{"type":"string","default":"fVRGY"},"inputLabel":{"type":"string","default":"E-mail"},"buttonLabel":{"type":"string","default":"Send"},"termsAndConditionsText":{"type":"string","default":"Acepto la política de privacidad y los términos de uso"},"destinationUrl":{"type":"string","default":""},"hasRowAlign":{"type":"boolean","default":"true"},"recaptchaKey":{"type":"string","default":""}}}');
 
 /***/ })
 

@@ -25,6 +25,10 @@
 		"type": "string",
 		"default": "#000000"
 		},
+		"inputTextColor": {
+		"type": "string",
+		"default": "#000000"
+		},
 		"buttonBackgroundColor": {
 			"type": "string",
 			"default": "#000000"
@@ -32,6 +36,10 @@
 		"buttonBorderColor": {
 		"type": "string",
 		"default": "#000000"
+		},
+		"buttonTextColor": {
+		"type": "string",
+		"default": "#ffffff"
 		},
 		"uniqueId": {
 			"type": "string",

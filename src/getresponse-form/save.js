@@ -31,7 +31,7 @@ export default function save({ attributes }) {
 					{/* Email input field (required) */}
 					<div class="form-field form-field__email alone-input-email hidden-label__field">
 						<label for={inputId}>{inputLabel}:</label>
-						<input type="text" name="email" placeholder={inputLabel} id={inputId} autocomplete="email"/>
+						<input type="text" name="email" placeholder={inputLabel} id={inputId} autocomplete="email" style={{backgroundColor: attributes.inputBackgroundColor,color: attributes.inputTextColor, borderColor: attributes.inputBorderColor}}/>
 						<div class="sr-only" aria-hidden="true">
 							<label for={`${inputId}-honeypot`}>Deja este campo vacío:</label>
 							<input id={`${inputId}-honeypot`} type="text" name="user_comment" tabindex="-1" autocomplete="off"/>
@@ -49,11 +49,11 @@ export default function save({ attributes }) {
 					</div>
 					{/* Submit button */}
 					<div class="form-field form-field__terms-conditions">
-						<input type="checkbox" id={checkboxId} name="terms-and-conditions" required />
+						<input type="checkbox" id={checkboxId} name="terms-and-conditions" required style={{backgroundColor: attributes.inputBackgroundColor,color: attributes.inputTextColor, borderColor: attributes.inputBorderColor}}/>
 						<label for={checkboxId}>{termsAndConditionsText}</label>
 					</div>
 					<div class="form-field form-field__submit-button">
-						<input class="g-recaptcha" data-callback='onSubmit' data-action='submit' data-id={uniqueId} data-sitekey={recaptchaKey} type="button" value={buttonLabel || 'Enviar'} />
+						<input class="g-recaptcha" data-callback='onSubmit' data-action='submit' data-id={uniqueId} data-sitekey={recaptchaKey} type="button" value={buttonLabel || 'Enviar'} style={{backgroundColor: attributes.buttonBackgroundColor,color: attributes.buttonTextColor, borderColor: attributes.buttonBorderColor}}/>
 					</div>
 				</div>
 			</form>
