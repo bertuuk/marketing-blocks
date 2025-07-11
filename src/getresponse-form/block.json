@@ -17,6 +17,22 @@
 	"style": "file:./style-index.css",
 	"viewScript": "file:./view.js",
 	"attributes": {
+		"inputBackgroundColor": {
+		"type": "string",
+		"default": "#ffffff"
+		},
+		"inputBorderColor": {
+		"type": "string",
+		"default": "#000000"
+		},
+		"buttonBackgroundColor": {
+			"type": "string",
+			"default": "#000000"
+		},
+		"buttonBorderColor": {
+		"type": "string",
+		"default": "#000000"
+		},
 		"uniqueId": {
 			"type": "string",
 			"default": ""

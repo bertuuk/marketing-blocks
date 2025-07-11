@@ -11,7 +11,7 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
+import { useBlockProps, InspectorControls, PanelColorSettings } from '@wordpress/block-editor';
 
 import { useInstanceId } from '@wordpress/compose';
 import { useEffect } from '@wordpress/element';
@@ -28,6 +28,14 @@ import { PanelBody, PanelRow, TextControl, ToggleControl } from '@wordpress/comp
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
+
+/**
+ * Imports utility function to calculate readable text color (black or white)
+ * based on background for WCAG contrast compliance.
+ *
+ * @see ../utils/colors.js
+ */
+import { getReadableTextColor } from '../utils/colors';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -99,11 +107,43 @@ export default function Edit({ attributes, setAttributes }) {
 		});
 	};
 
-	// Add similar handler functions for other attributes like buttonLabel, preventRedirect, etc.
+	const inputTextColor = getReadableTextColor(attributes.inputBackgroundColor);
+	const buttonTextColor = getReadableTextColor(attributes.buttonBackgroundColor);
 
 	return (
 		<div {...useBlockProps()}>
+			
 			<InspectorControls>
+				<PanelColorSettings
+			title={__("Colors", "getresponse-form-block")}
+			initialOpen={true}
+			colorSettings={[
+				{
+				label: __("Input Background", "getresponse-form-block"),
+				value: attributes.inputBackgroundColor,
+				onChange: (color) => setAttributes({ inputBackgroundColor: color }),
+				
+				},
+				{
+				label: __("Input Border", "getresponse-form-block"),
+				value: attributes.inputBorderColor,
+				onChange: (color) => setAttributes({ inputBorderColor: color }),
+				
+				},
+				{
+				label: __("Button Background", "getresponse-form-block"),
+				value: attributes.buttonBackgroundColor,
+				onChange: (color) => setAttributes({ buttonBackgroundColor: color }),
+				
+				},
+				{
+				label: __("Button Border", "getresponse-form-block"),
+				value: attributes.buttonBorderColor,
+				onChange: (color) => setAttributes({ buttonBorderColor: color }),
+				
+				},
+			]}
+			/>
 				<PanelBody
 					title={__("Configuración del Bloque", "getresponse-form-block")}
 					initialOpen={true}
@@ -193,6 +233,7 @@ export default function Edit({ attributes, setAttributes }) {
 					{/* Email input field (required) */}
 					<div class="form-field form-field__email alone-input-email hidden-label__field">
 						{inputLabel}:
+						<input style={{backgroundColor: attributes.inputBackgroundColor,color: inputTextColor}} type="text" name="email" autocomplete="email"/>
 					</div>
 
 					{/* Submit button */}
@@ -200,7 +241,7 @@ export default function Edit({ attributes, setAttributes }) {
 						▢ {termsAndConditionsText}
 					</div>
 					<div class="form-field form-field__submit-button">
-						<input class="g-recaptcha" data-callback='onSubmit' data-action='submit' data-id={uniqueId} data-sitekey={recaptchaKey} type="submit" value={buttonLabel || 'Enviar'} />
+						<input style={{backgroundColor: attributes.buttonBackgroundColor,color: buttonTextColor}} class="g-recaptcha" data-callback='onSubmit' data-action='submit' data-id={uniqueId} data-sitekey={recaptchaKey} type="submit" value={buttonLabel || 'Enviar'} />
 					</div>
 				</div>
 			</div>

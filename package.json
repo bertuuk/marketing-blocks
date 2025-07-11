@@ -15,6 +15,9 @@
 		"start": "wp-scripts start"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^26.19.0"
+		"@wordpress/scripts": "^30.19.0"
+	},
+	"dependencies": {
+		"tinycolor2": "^1.6.0"
 	}
 }

@@ -126,7 +126,7 @@
 .lead-mail-form .form-field__terms-conditions label {
   color: #484848;
   font-size: 0.9rem;
-  padding-left: 0.3em;
+  padding-right: 0.3em;
 }
 .lead-mail-form[data-darktheme=false] .form-group input[type=text] {
   border: 1px solid #ffffff;
@@ -193,5 +193,3 @@
 .lead-mail-form input.error {
   border-color: 1px solid #ab0808;
 }
-
-/*# sourceMappingURL=index.css.map*/
