@@ -510,6 +510,7 @@ function save({
           class: "form-field form-field__terms-conditions",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
             type: "checkbox",
+            class: "dahlia-checkbox-input",
             id: checkboxId,
             name: "terms-and-conditions",
             required: true,
@@ -518,12 +519,29 @@ function save({
               color: attributes.inputTextColor,
               borderColor: attributes.inputBorderColor
             }
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("label", {
+            class: "dahlia-checkbox-label",
             for: checkboxId,
             style: {
               color: attributes.inputLabelColor
             },
-            children: termsAndConditionsText
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+              class: "dahlia-checkbox-box",
+              "aria-hidden": "true",
+              style: {
+                backgroundColor: attributes.inputBackgroundColor,
+                borderColor: attributes.inputBorderColor
+              },
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+                class: "dahlia-tick",
+                style: {
+                  borderColor: attributes.inputTextColor
+                }
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+              class: "dahlia-checkbox-text",
+              children: termsAndConditionsText
+            })]
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
           class: "form-field form-field__submit-button",

@@ -49,8 +49,20 @@ export default function save({ attributes }) {
 					</div>
 					{/* Submit button */}
 					<div class="form-field form-field__terms-conditions">
-						<input type="checkbox" id={checkboxId} name="terms-and-conditions" required style={{backgroundColor: attributes.inputBackgroundColor,color: attributes.inputTextColor, borderColor: attributes.inputBorderColor}}/>
-						<label for={checkboxId} style={{color: attributes.inputLabelColor}}>{termsAndConditionsText}</label>
+						<input type="checkbox" class="dahlia-checkbox-input" id={checkboxId} name="terms-and-conditions" required style={{backgroundColor: attributes.inputBackgroundColor,color: attributes.inputTextColor, borderColor: attributes.inputBorderColor}}/>
+						<label class="dahlia-checkbox-label" for={checkboxId} style={{color: attributes.inputLabelColor}}>
+							<span
+      class="dahlia-checkbox-box"
+      aria-hidden="true"
+      style={{ backgroundColor: attributes.inputBackgroundColor, borderColor: attributes.inputBorderColor }}
+    >
+      <span
+        class="dahlia-tick"
+        style={{ borderColor: attributes.inputTextColor }}
+      />
+    </span>
+							<span class="dahlia-checkbox-text">{termsAndConditionsText}</span>
+						</label>
 					</div>
 					<div class="form-field form-field__submit-button">
 						<input class="g-recaptcha" data-callback='onSubmit' data-action='submit' data-id={uniqueId} data-sitekey={recaptchaKey} type="button" value={buttonLabel || 'Enviar'} style={{backgroundColor: attributes.buttonBackgroundColor,color: attributes.buttonTextColor, borderColor: attributes.buttonBorderColor}}/>
