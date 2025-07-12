@@ -11,7 +11,7 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
+import { useBlockProps, InspectorControls, PanelColorSettings } from '@wordpress/block-editor';
 
 import { useInstanceId } from '@wordpress/compose';
 import { useEffect } from '@wordpress/element';
@@ -30,6 +30,14 @@ import { PanelBody, PanelRow, TextControl, ToggleControl } from '@wordpress/comp
 import './editor.scss';
 
 /**
+ * Imports utility function to calculate readable text color (black or white)
+ * based on background for WCAG contrast compliance.
+ *
+ * @see ../utils/colors.js
+ */
+import { getReadableTextColor, isDarkColor } from '../utils/colors';
+
+/**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
  *
@@ -40,20 +48,20 @@ import './editor.scss';
  */
 export default function Edit({ attributes, setAttributes }) {
 	const instanceId = useInstanceId(Edit);
-    const { uniqueId } = 'attributes';
+	const { uniqueId } = 'attributes';
 
-    // Genera un número aleatorio entre 0 y 1000000
-    const randomNumber = Math.floor(Math.random() * 1000000);
+	// Genera un número aleatorio entre 0 y 1000000
+	const randomNumber = Math.floor(Math.random() * 1000000);
 
-    useEffect(() => {
-        if (!uniqueId) {
-            // Asigna un ID único basado en uniqueInstanceId
-            setAttributes({ uniqueId: `getresponse-form-${instanceId}-${randomNumber}` });
-        }
-    }, [uniqueId, setAttributes]);
+	useEffect(() => {
+		if (!uniqueId) {
+			// Asigna un ID único basado en uniqueInstanceId
+			setAttributes({ uniqueId: `getresponse-form-${instanceId}-${randomNumber}` });
+		}
+	}, [uniqueId, setAttributes]);
 	// Extracting attributes and setAttributes function from props
 	// preventRedirect, confirmationMessage, destinationUrl		
-	const { campaignToken, inputLabel, buttonLabel, destinationUrl, termsAndConditionsText, hasRowAlign, RowAlign, hasDarkTheme, recaptchaKey } = attributes;
+	const { campaignToken, inputLabel, buttonLabel, destinationUrl, termsAndConditionsText, hasRowAlign, RowAlign, hasLabel, recaptchaKey, isDarkInput } = attributes;
 
 	// Handler functions for attribute changes
 	const onChangeCampaignToken = (value) => {
@@ -88,9 +96,9 @@ export default function Edit({ attributes, setAttributes }) {
 			hasRowAlign: newRowAlign,
 		});
 	};
-	const onChangeDarkTheme = (newDarkTheme) => {
+	const onChangeLabel = (newLabel) => {
 		setAttributes({
-			hasDarkTheme: newDarkTheme,
+			hasLabel: newLabel,
 		});
 	};
 	const onChangeRecaptchaKey = (newRecaptchaKey) => {
@@ -99,11 +107,75 @@ export default function Edit({ attributes, setAttributes }) {
 		});
 	};
 
-	// Add similar handler functions for other attributes like buttonLabel, preventRedirect, etc.
+	/**
+	 * useEffect to calculate and save inputTextColor and buttonTextColor
+	 * whenever their background colors change.
+	 */
+	useEffect(() => {
+		const newInputTextColor = getReadableTextColor(attributes.inputBackgroundColor);
+		if (newInputTextColor !== attributes.inputTextColor) {
+			setAttributes({ inputTextColor: newInputTextColor });
+		}
+	}, [attributes.inputBackgroundColor]);
+
+	useEffect(() => {
+		const newButtonTextColor = getReadableTextColor(attributes.buttonBackgroundColor);
+		if (newButtonTextColor !== attributes.buttonTextColor) {
+			setAttributes({ buttonTextColor: newButtonTextColor });
+		}
+	}, [attributes.buttonBackgroundColor]);
+	useEffect(() => {
+		const isDark = isDarkColor(attributes.inputTextColor);
+		if (attributes.isDarkInput !== isDark) {
+			setAttributes({ isDarkInput: isDark });
+		}
+	}, [attributes.inputTextColor]);
+
+	const inputId = 'alone-input-email_' + uniqueId;
+	const checkboxId = 'terms-conditions_' + uniqueId;
+	const inputPlaceholder = !hasLabel ? inputLabel : undefined;
+	const inputTextClass = isDarkInput ? 'is-dark' : 'is-light';
 
 	return (
 		<div {...useBlockProps()}>
+
 			<InspectorControls>
+				<PanelColorSettings
+					title={__("Colors", "getresponse-form-block")}
+					initialOpen={true}
+					colorSettings={[
+						{
+							label: __("Input Label", "getresponse-form-block"),
+							value: attributes.inputLabelColor,
+							onChange: (color) => setAttributes({ inputLabelColor: color }),
+
+						},
+						{
+							label: __("Input Background", "getresponse-form-block"),
+							value: attributes.inputBackgroundColor,
+							onChange: (color) => setAttributes({ inputBackgroundColor: color }),
+
+						},
+						{
+							label: __("Input Border", "getresponse-form-block"),
+							value: attributes.inputBorderColor,
+							onChange: (color) => setAttributes({ inputBorderColor: color }),
+
+						},
+						{
+							label: __("Button Background", "getresponse-form-block"),
+							value: attributes.buttonBackgroundColor,
+							onChange: (color) => setAttributes({ buttonBackgroundColor: color }),
+
+						},
+						{
+							label: __("Button Border", "getresponse-form-block"),
+							value: attributes.buttonBorderColor,
+							onChange: (color) => setAttributes({ buttonBorderColor: color }),
+
+						},
+					]}
+				/>
 				<PanelBody
 					title={__("Configuración del Bloque", "getresponse-form-block")}
 					initialOpen={true}
@@ -123,14 +195,14 @@ export default function Edit({ attributes, setAttributes }) {
 					</PanelRow>
 					<PanelRow>
 						<ToggleControl
-							label={__("Color", "getresponse-form-block")}
+							label={__("Label", "getresponse-form-block")}
 							help={
-								hasDarkTheme
-									? 'Dark color'
-									: 'Light color'
+								hasLabel
+									? 'Yes'
+									: 'No'
 							}
-							checked={hasDarkTheme}
-							onChange={() => setAttributes({ hasDarkTheme: !hasDarkTheme })}
+							checked={hasLabel}
+							onChange={() => setAttributes({ hasLabel: !hasLabel })}
 						/>
 					</PanelRow>
 					<PanelRow>
@@ -188,23 +260,35 @@ export default function Edit({ attributes, setAttributes }) {
 					</PanelRow>
 				</PanelBody>
 			</InspectorControls>
-			<div class="lead-mail-form" data-rowalign={hasRowAlign} data-darktheme={hasDarkTheme} id={uniqueId}>
-				<div class="form-group form-group__first">
-					{/* Email input field (required) */}
-					<div class="form-field form-field__email alone-input-email hidden-label__field">
-						{inputLabel}:
+			<div className="lead-mail-form" data-rowalign={hasRowAlign} id={uniqueId}>
+				<div className="form-group form-group__first">
+
+					{hasLabel && (
+						<div className="form-field form-field__email-label" data-label={hasLabel}>
+							<label htmlFor={inputId} style={{ color: attributes.inputLabelColor }}>{inputLabel}</label>
+						</div>
+					)}
+
+					<div className="form-field form-field__email alone-input-email" data-label={hasLabel}>
+						<input type="text" id={inputId} name="email" autoComplete="email" className={`form-input ${inputTextClass}`} placeholder={inputPlaceholder} style={{ backgroundColor: attributes.inputBackgroundColor, color: attributes.inputTextColor, borderColor: attributes.inputBorderColor }} disabled/>
 					</div>
 
-					{/* Submit button */}
-					<div class="form-field form-field__terms-conditions">
-						▢ {termsAndConditionsText}
+					<div className="form-field form-field__terms-conditions">
+						<input type="checkbox" className="dahlia-checkbox-input" id={checkboxId} name="terms-and-conditions" disabled style={{ backgroundColor: attributes.inputBackgroundColor, color: attributes.inputTextColor, borderColor: attributes.inputBorderColor }} />
+						<label className="dahlia-checkbox-label" htmlFor={checkboxId} style={{ color: attributes.inputLabelColor }}>
+							<span className="dahlia-checkbox-box" aria-hidden="true" style={{ backgroundColor: attributes.inputBackgroundColor, borderColor: attributes.inputBorderColor }}>
+								<span className="dahlia-tick" style={{ borderColor: attributes.inputTextColor }} />
+							</span>
+							<span className="dahlia-checkbox-text">{termsAndConditionsText}</span>
+						</label>
 					</div>
-					<div class="form-field form-field__submit-button">
-						<input class="g-recaptcha" data-callback='onSubmit' data-action='submit' data-id={uniqueId} data-sitekey={recaptchaKey} type="submit" value={buttonLabel || 'Enviar'} />
+
+					<div className="form-field form-field__submit-button">
+						<input type="button" value={buttonLabel || 'Enviar'} className="g-recaptcha" data-callback="onSubmit" data-action="submit" data-id={uniqueId} data-sitekey={recaptchaKey} disabled style={{ backgroundColor: attributes.buttonBackgroundColor, color: attributes.buttonTextColor, borderColor: attributes.buttonBorderColor }} />
 					</div>
+
 				</div>
 			</div>
-
 		</div>
 	);
 }
