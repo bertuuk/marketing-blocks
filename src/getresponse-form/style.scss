@@ -65,15 +65,29 @@ $smallDevices: 540px;
 
 				input {
 					width: 100%;
+					&.is-light{
+						&::placeholder{
+							color: $color-white;
+							opacity:0.8;
+						}
+					}
+					&.is-dark{
+						&::placeholder{
+							color: $color-black;
+							opacity:0.8;
+						}
+					}
 
 				}
 			}
 
-			.hidden-label__field {
+			.hidden-label__field, .form-field[data-label="false"] {
 				label {
 					@include visually-hidden;
 				}
 			}
+
+			
 
 			input {
 				font-size: 1.2rem;
@@ -151,6 +165,7 @@ $smallDevices: 540px;
 					align-items: center;
 					cursor: pointer;
 					user-select: none;
+					padding-left:0;
 				}
 
 				&-box {
@@ -189,6 +204,7 @@ $smallDevices: 540px;
 		.form-field {
 			display: flex;
 			align-items: flex-start;
+			flex-direction:column;
 
 		}
 
@@ -221,32 +237,38 @@ $smallDevices: 540px;
 	/* Estilos para desktop */
 	@media (min-width: $largeDevices) {
 		.lead-mail-form:not([data-rowalign="false"]) {
+			.form-field{
+				flex-direction:row;
+			}
 			.form-group__first {
 				grid-template-columns: 1fr auto;
 				/* Dos columnas: input en la primera, botón en la segunda */
-				grid-template-rows: auto auto;
+				grid-template-rows: auto auto auto;
 				/* Dos filas */
+			}
+
+			.form-field__email-label {
+				grid-column: 1 / 2;
+				grid-row: 1 / 2;
 			}
 
 			.form-field__email {
 				grid-column: 1 / 2;
 				/* El input de email ocupa la primera columna */
-				grid-row: 1 / 2;
-				/* Primera fila */
+				grid-row: 2 / 3;
+			
 			}
 
 			.form-field__terms-conditions {
-				grid-column: 1 / -1;
+				grid-column: 1 / 3;
 				/* Checkbox ocupa ambas columnas */
-				grid-row: 2 / 3;
-				/* Segunda fila */
+				grid-row: 3 / 4;
 			}
 
 			.form-field__submit-button {
 				grid-column: 2 / 3;
 				/* El botón de envío ocupa la segunda columna */
-				grid-row: 1 / 2;
-				/* Primera fila */
+				grid-row: 2 / 3;
 			}
 		}
 
@@ -269,6 +291,7 @@ $smallDevices: 540px;
 					padding: 0.8rem 2rem 0.65rem;
 					border-radius: 5px;
 				}
+				
 			}
 			&:not([data-rowalign=false]){
 				.form-field__submit-button{

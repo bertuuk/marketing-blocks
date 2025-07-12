@@ -22,36 +22,36 @@
 			"default": "#000000"
 		},
 		"inputBackgroundColor": {
-		"type": "string",
-		"default": "#ffffff"
+			"type": "string",
+			"default": "#ffffff"
 		},
 		"inputBorderColor": {
-		"type": "string",
-		"default": "#000000"
+			"type": "string",
+			"default": "#000000"
 		},
 		"inputTextColor": {
-		"type": "string",
-		"default": "#000000"
+			"type": "string",
+			"default": "#000000"
 		},
 		"buttonBackgroundColor": {
 			"type": "string",
 			"default": "#000000"
 		},
 		"buttonBorderColor": {
-		"type": "string",
-		"default": "#000000"
+			"type": "string",
+			"default": "#000000"
 		},
 		"buttonTextColor": {
-		"type": "string",
-		"default": "#ffffff"
+			"type": "string",
+			"default": "#ffffff"
 		},
 		"uniqueId": {
 			"type": "string",
 			"default": ""
 		},
 		"campaignToken": {
-		  "type": "string",
-		  "default": "fVRGY"
+			"type": "string",
+			"default": "fVRGY"
 		},
 		"inputLabel": {
 			"type": "string",
@@ -73,9 +73,17 @@
 			"type": "boolean",
 			"default": "true"
 		},
+		"hasLabel": {
+			"type": "boolean",
+			"default": "false"
+		},
+		"isDarkInput": {
+			"type": "boolean",
+			"default": false
+		},
 		"recaptchaKey": {
 			"type": "string",
 			"default": ""
 		}
-	  }
+	}
 }

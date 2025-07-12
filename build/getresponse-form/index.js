@@ -103,8 +103,9 @@ function Edit({
     termsAndConditionsText,
     hasRowAlign,
     RowAlign,
-    hasDarkTheme,
-    recaptchaKey
+    hasLabel,
+    recaptchaKey,
+    isDarkInput
   } = attributes;
 
   // Handler functions for attribute changes
@@ -138,9 +139,9 @@ function Edit({
       hasRowAlign: newRowAlign
     });
   };
-  const onChangeDarkTheme = newDarkTheme => {
+  const onChangeLabel = newLabel => {
     setAttributes({
-      hasDarkTheme: newDarkTheme
+      hasLabel: newLabel
     });
   };
   const onChangeRecaptchaKey = newRecaptchaKey => {
@@ -169,6 +170,18 @@ function Edit({
       });
     }
   }, [attributes.buttonBackgroundColor]);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
+    const isDark = (0,_utils_colors__WEBPACK_IMPORTED_MODULE_6__.isDarkColor)(attributes.inputTextColor);
+    if (attributes.isDarkInput !== isDark) {
+      setAttributes({
+        isDarkInput: isDark
+      });
+    }
+  }, [attributes.inputTextColor]);
+  const inputId = 'alone-input-email_' + uniqueId;
+  const checkboxId = 'terms-conditions_' + uniqueId;
+  const inputPlaceholder = !hasLabel ? inputLabel : undefined;
+  const inputTextClass = isDarkInput ? 'is-dark' : 'is-light';
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)(),
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
@@ -220,11 +233,11 @@ function Edit({
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelRow, {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ToggleControl, {
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Color", "getresponse-form-block"),
-            help: hasDarkTheme ? 'Dark color' : 'Light color',
-            checked: hasDarkTheme,
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Label", "getresponse-form-block"),
+            help: hasLabel ? 'Yes' : 'No',
+            checked: hasLabel,
             onChange: () => setAttributes({
-              hasDarkTheme: !hasDarkTheme
+              hasLabel: !hasLabel
             })
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelRow, {
@@ -276,52 +289,91 @@ function Edit({
         })]
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-      class: "lead-mail-form",
+      className: "lead-mail-form",
       "data-rowalign": hasRowAlign,
-      "data-darktheme": hasDarkTheme,
       id: uniqueId,
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-        class: "form-group form-group__first",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-          class: "form-field form-field__email alone-input-email hidden-label__field",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("label", {
+        className: "form-group form-group__first",
+        children: [hasLabel && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          className: "form-field form-field__email-label",
+          "data-label": hasLabel,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("label", {
+            htmlFor: inputId,
             style: {
               color: attributes.inputLabelColor
             },
             children: inputLabel
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          className: "form-field form-field__email alone-input-email",
+          "data-label": hasLabel,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
+            type: "text",
+            id: inputId,
+            name: "email",
+            autoComplete: "email",
+            className: `form-input ${inputTextClass}`,
+            placeholder: inputPlaceholder,
             style: {
               backgroundColor: attributes.inputBackgroundColor,
               color: attributes.inputTextColor,
               borderColor: attributes.inputBorderColor
             },
-            type: "text",
-            name: "email",
-            autocomplete: "email"
-          })]
+            disabled: true
+          })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-          class: "form-field form-field__terms-conditions",
-          children: ["\u25A2 ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("label", {
+          className: "form-field form-field__terms-conditions",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
+            type: "checkbox",
+            className: "dahlia-checkbox-input",
+            id: checkboxId,
+            name: "terms-and-conditions",
+            disabled: true,
+            style: {
+              backgroundColor: attributes.inputBackgroundColor,
+              color: attributes.inputTextColor,
+              borderColor: attributes.inputBorderColor
+            }
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
+            className: "dahlia-checkbox-label",
+            htmlFor: checkboxId,
             style: {
               color: attributes.inputLabelColor
             },
-            children: termsAndConditionsText
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+              className: "dahlia-checkbox-box",
+              "aria-hidden": "true",
+              style: {
+                backgroundColor: attributes.inputBackgroundColor,
+                borderColor: attributes.inputBorderColor
+              },
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+                className: "dahlia-tick",
+                style: {
+                  borderColor: attributes.inputTextColor
+                }
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+              className: "dahlia-checkbox-text",
+              children: termsAndConditionsText
+            })]
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-          class: "form-field form-field__submit-button",
+          className: "form-field form-field__submit-button",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
-            style: {
-              backgroundColor: attributes.buttonBackgroundColor,
-              color: attributes.buttonTextColor,
-              borderColor: attributes.buttonBorderColor
-            },
-            class: "g-recaptcha",
+            type: "button",
+            value: buttonLabel || 'Enviar',
+            className: "g-recaptcha",
             "data-callback": "onSubmit",
             "data-action": "submit",
             "data-id": uniqueId,
             "data-sitekey": recaptchaKey,
-            type: "submit",
-            value: buttonLabel || 'Enviar'
+            disabled: true,
+            style: {
+              backgroundColor: attributes.buttonBackgroundColor,
+              color: attributes.buttonTextColor,
+              borderColor: attributes.buttonBorderColor
+            }
           })
         })]
       })
@@ -433,36 +485,43 @@ function save({
     destinationUrl,
     termsAndConditionsText,
     hasRowAlign,
-    hasDarkTheme,
+    hasLabel,
     recaptchaKey
   } = attributes;
   let inputId = 'alone-input-email_' + uniqueId;
   let checkboxId = 'terms-conditions_' + uniqueId;
   let recaptchaScriptUrl = 'https://www.google.com/recaptcha/api.js?render=' + recaptchaKey;
+  const inputTextClass = attributes.isDarkInput ? 'is-dark' : 'is-light';
+  const inputPlaceholder = !hasLabel ? inputLabel : undefined;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
     ..._wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.useBlockProps.save(),
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("form", {
       class: "lead-mail-form",
       "data-rowalign": hasRowAlign,
-      "data-darktheme": hasDarkTheme,
       action: "https://app.getresponse.com/add_subscriber.html",
       "accept-charset": "utf-8",
       method: "post",
       id: uniqueId,
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
         class: "form-group form-group__first",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-          class: "form-field form-field__email alone-input-email hidden-label__field",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+          class: "form-field form-field__email-label",
+          "data-label": hasLabel,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
             for: inputId,
             style: {
               color: attributes.inputLabelColor
             },
             children: inputLabel
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+          class: "form-field form-field__email alone-input-email",
+          "data-label": hasLabel,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
             type: "text",
             name: "email",
-            placeholder: inputLabel,
+            class: inputTextClass,
+            placeholder: inputPlaceholder,
             id: inputId,
             autocomplete: "email",
             style: {
@@ -584,7 +643,8 @@ function save({
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   getReadableTextColor: () => (/* binding */ getReadableTextColor)
+/* harmony export */   getReadableTextColor: () => (/* binding */ getReadableTextColor),
+/* harmony export */   isDarkColor: () => (/* binding */ isDarkColor)
 /* harmony export */ });
 /* harmony import */ var tinycolor2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tinycolor2 */ "./node_modules/tinycolor2/esm/tinycolor.js");
 /**
@@ -614,6 +674,14 @@ function getReadableTextColor(bgColor) {
     // If neither meets 4.5, return the highest contrast anyway
     return contrastWithBlack > contrastWithWhite ? '#000000' : '#FFFFFF';
   }
+}
+
+/**
+ * Returns true if the given color is dark, false otherwise.
+ * Used for conditional class names like 'is-dark' or 'is-light'.
+ */
+function isDarkColor(color) {
+  return (0,tinycolor2__WEBPACK_IMPORTED_MODULE_0__["default"])(color).isDark();
 }
 
 /***/ }),
@@ -1912,7 +1980,7 @@ function validateWCAG2Parms(parms) {
   \*****************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/getresponse-form-block","version":"0.1.0","title":"Getresponse Form Block","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"getresponse-form-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","attributes":{"inputLabelColor":{"type":"string","default":"#000000"},"inputBackgroundColor":{"type":"string","default":"#ffffff"},"inputBorderColor":{"type":"string","default":"#000000"},"inputTextColor":{"type":"string","default":"#000000"},"buttonBackgroundColor":{"type":"string","default":"#000000"},"buttonBorderColor":{"type":"string","default":"#000000"},"buttonTextColor":{"type":"string","default":"#ffffff"},"uniqueId":{"type":"string","default":""},"campaignToken":{"type":"string","default":"fVRGY"},"inputLabel":{"type":"string","default":"E-mail"},"buttonLabel":{"type":"string","default":"Send"},"termsAndConditionsText":{"type":"string","default":"Acepto la política de privacidad y los términos de uso"},"destinationUrl":{"type":"string","default":""},"hasRowAlign":{"type":"boolean","default":"true"},"recaptchaKey":{"type":"string","default":""}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/getresponse-form-block","version":"0.1.0","title":"Getresponse Form Block","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"getresponse-form-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","attributes":{"inputLabelColor":{"type":"string","default":"#000000"},"inputBackgroundColor":{"type":"string","default":"#ffffff"},"inputBorderColor":{"type":"string","default":"#000000"},"inputTextColor":{"type":"string","default":"#000000"},"buttonBackgroundColor":{"type":"string","default":"#000000"},"buttonBorderColor":{"type":"string","default":"#000000"},"buttonTextColor":{"type":"string","default":"#ffffff"},"uniqueId":{"type":"string","default":""},"campaignToken":{"type":"string","default":"fVRGY"},"inputLabel":{"type":"string","default":"E-mail"},"buttonLabel":{"type":"string","default":"Send"},"termsAndConditionsText":{"type":"string","default":"Acepto la política de privacidad y los términos de uso"},"destinationUrl":{"type":"string","default":""},"hasRowAlign":{"type":"boolean","default":"true"},"hasLabel":{"type":"boolean","default":"false"},"isDarkInput":{"type":"boolean","default":false},"recaptchaKey":{"type":"string","default":""}}}');
 
 /***/ })
 

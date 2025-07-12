@@ -73,6 +73,14 @@
       "type": "boolean",
       "default": "true"
     },
+    "hasLabel": {
+      "type": "boolean",
+      "default": "false"
+    },
+    "isDarkInput": {
+      "type": "boolean",
+      "default": false
+    },
     "recaptchaKey": {
       "type": "string",
       "default": ""

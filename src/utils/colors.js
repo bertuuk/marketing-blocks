@@ -28,3 +28,11 @@ export function getReadableTextColor(bgColor) {
     return contrastWithBlack > contrastWithWhite ? '#000000' : '#FFFFFF';
   }
 }
+
+/**
+ * Returns true if the given color is dark, false otherwise.
+ * Used for conditional class names like 'is-dark' or 'is-light'.
+ */
+export function isDarkColor(color) {
+	return tinycolor(color).isDark();
+}
