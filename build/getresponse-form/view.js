@@ -96,12 +96,17 @@ async function validateRecaptchaOnServer(token) {
   }
 }
 function showError(message, form) {
+  let errorRegion = form.querySelector('.form-error-region');
+  if (!errorRegion) {
+    console.warn('No error region defined in form for accessibility.');
+    return;
+  }
   // Crear un div para mostrar el mensaje de error
-  let errorDiv = form.querySelector('.form-error-message');
+  let errorDiv = errorRegion.querySelector('.form-error-message');
   if (!errorDiv) {
     errorDiv = document.createElement('div');
     errorDiv.className = 'form-error-message';
-    form.appendChild(errorDiv);
+    errorRegion.appendChild(errorDiv);
   }
   errorDiv.textContent = message;
 
@@ -111,8 +116,13 @@ function showError(message, form) {
   });
 }
 function clearError(form) {
+  let errorRegion = form.querySelector('.form-error-region');
+  if (!errorRegion) {
+    console.warn('No error region defined in form for accessibility.');
+    return;
+  }
   // Borrar el div con el mensaje de error si existe
-  let errorDiv = form.querySelector('.form-error-message');
+  let errorDiv = errorRegion.querySelector('.form-error-message');
   if (errorDiv) {
     errorDiv.remove();
   }
@@ -136,7 +146,7 @@ document.querySelectorAll('.g-recaptcha').forEach(button => {
     // Validar los campos del formulario
     errors = errors.concat(validateFormFields(form));
     if (errors.length > 0) {
-      showError(errors.join(' '), form);
+      showError(errors.join('\n'), form);
       return;
     }
 
@@ -174,7 +184,7 @@ window.onSubmit = function (token, activeSubmitButton, event) {
       // Validar campos del formulario y trampas
       const errors = validateFormFields(form).concat(validateUserTraps(form));
       if (errors.length > 0) {
-        showError(errors.join(' '), form);
+        showError(errors.join(' \n'), form);
         return; // Evitar que se continúe si hay errores
       }
       const formData = new FormData(form);
@@ -197,10 +207,10 @@ window.onSubmit = function (token, activeSubmitButton, event) {
             showError(recaptchaError, form);
           });
         } else {
-          showError(validationError, form);
+          showError(messages.validationError, form);
         }
       }).catch(() => {
-        showError(validationError, form);
+        showError(messages.validationError, form);
       });
 
       // Valida el token de reCAPTCHA en el servidor

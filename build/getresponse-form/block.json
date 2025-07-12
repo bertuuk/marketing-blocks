@@ -17,6 +17,10 @@
   "style": "file:./style-index.css",
   "viewScript": "file:./view.js",
   "attributes": {
+    "inputLabelColor": {
+      "type": "string",
+      "default": "#000000"
+    },
     "inputBackgroundColor": {
       "type": "string",
       "default": "#ffffff"

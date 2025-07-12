@@ -30,7 +30,7 @@ export default function save({ attributes }) {
 				<div class="form-group form-group__first">
 					{/* Email input field (required) */}
 					<div class="form-field form-field__email alone-input-email hidden-label__field">
-						<label for={inputId}>{inputLabel}:</label>
+						<label for={inputId} style={{color: attributes.inputLabelColor}}>{inputLabel}</label>
 						<input type="text" name="email" placeholder={inputLabel} id={inputId} autocomplete="email" style={{backgroundColor: attributes.inputBackgroundColor,color: attributes.inputTextColor, borderColor: attributes.inputBorderColor}}/>
 						<div class="sr-only" aria-hidden="true">
 							<label for={`${inputId}-honeypot`}>Deja este campo vacío:</label>
@@ -50,12 +50,13 @@ export default function save({ attributes }) {
 					{/* Submit button */}
 					<div class="form-field form-field__terms-conditions">
 						<input type="checkbox" id={checkboxId} name="terms-and-conditions" required style={{backgroundColor: attributes.inputBackgroundColor,color: attributes.inputTextColor, borderColor: attributes.inputBorderColor}}/>
-						<label for={checkboxId}>{termsAndConditionsText}</label>
+						<label for={checkboxId} style={{color: attributes.inputLabelColor}}>{termsAndConditionsText}</label>
 					</div>
 					<div class="form-field form-field__submit-button">
 						<input class="g-recaptcha" data-callback='onSubmit' data-action='submit' data-id={uniqueId} data-sitekey={recaptchaKey} type="button" value={buttonLabel || 'Enviar'} style={{backgroundColor: attributes.buttonBackgroundColor,color: attributes.buttonTextColor, borderColor: attributes.buttonBorderColor}}/>
 					</div>
 				</div>
+				<div class="form-error-region" aria-live="assertive" aria-atomic="true" style={{color: attributes.inputLabelColor}}></div>
 			</form>
 			<script src={recaptchaScriptUrl}></script>
 		</div>

@@ -176,6 +176,12 @@ function Edit({
         title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Colors", "getresponse-form-block"),
         initialOpen: true,
         colorSettings: [{
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Input Label", "getresponse-form-block"),
+          value: attributes.inputLabelColor,
+          onChange: color => setAttributes({
+            inputLabelColor: color
+          })
+        }, {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Input Background", "getresponse-form-block"),
           value: attributes.inputBackgroundColor,
           onChange: color => setAttributes({
@@ -278,7 +284,12 @@ function Edit({
         class: "form-group form-group__first",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
           class: "form-field form-field__email alone-input-email hidden-label__field",
-          children: [inputLabel, ":", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("label", {
+            style: {
+              color: attributes.inputLabelColor
+            },
+            children: inputLabel
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
             style: {
               backgroundColor: attributes.inputBackgroundColor,
               color: attributes.inputTextColor,
@@ -290,7 +301,12 @@ function Edit({
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
           class: "form-field form-field__terms-conditions",
-          children: ["\u25A2 ", termsAndConditionsText]
+          children: ["\u25A2 ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("label", {
+            style: {
+              color: attributes.inputLabelColor
+            },
+            children: termsAndConditionsText
+          })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
           class: "form-field form-field__submit-button",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
@@ -425,7 +441,7 @@ function save({
   let recaptchaScriptUrl = 'https://www.google.com/recaptcha/api.js?render=' + recaptchaKey;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
     ..._wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.useBlockProps.save(),
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("form", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("form", {
       class: "lead-mail-form",
       "data-rowalign": hasRowAlign,
       "data-darktheme": hasDarkTheme,
@@ -433,13 +449,16 @@ function save({
       "accept-charset": "utf-8",
       method: "post",
       id: uniqueId,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
         class: "form-group form-group__first",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
           class: "form-field form-field__email alone-input-email hidden-label__field",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
             for: inputId,
-            children: [inputLabel, ":"]
+            style: {
+              color: attributes.inputLabelColor
+            },
+            children: inputLabel
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
             type: "text",
             name: "email",
@@ -501,6 +520,9 @@ function save({
             }
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
             for: checkboxId,
+            style: {
+              color: attributes.inputLabelColor
+            },
             children: termsAndConditionsText
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
@@ -520,7 +542,14 @@ function save({
             }
           })
         })]
-      })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+        class: "form-error-region",
+        "aria-live": "assertive",
+        "aria-atomic": "true",
+        style: {
+          color: attributes.inputLabelColor
+        }
+      })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("script", {
       src: recaptchaScriptUrl
     })]
@@ -1865,7 +1894,7 @@ function validateWCAG2Parms(parms) {
   \*****************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/getresponse-form-block","version":"0.1.0","title":"Getresponse Form Block","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"getresponse-form-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","attributes":{"inputBackgroundColor":{"type":"string","default":"#ffffff"},"inputBorderColor":{"type":"string","default":"#000000"},"inputTextColor":{"type":"string","default":"#000000"},"buttonBackgroundColor":{"type":"string","default":"#000000"},"buttonBorderColor":{"type":"string","default":"#000000"},"buttonTextColor":{"type":"string","default":"#ffffff"},"uniqueId":{"type":"string","default":""},"campaignToken":{"type":"string","default":"fVRGY"},"inputLabel":{"type":"string","default":"E-mail"},"buttonLabel":{"type":"string","default":"Send"},"termsAndConditionsText":{"type":"string","default":"Acepto la política de privacidad y los términos de uso"},"destinationUrl":{"type":"string","default":""},"hasRowAlign":{"type":"boolean","default":"true"},"recaptchaKey":{"type":"string","default":""}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/getresponse-form-block","version":"0.1.0","title":"Getresponse Form Block","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"getresponse-form-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","attributes":{"inputLabelColor":{"type":"string","default":"#000000"},"inputBackgroundColor":{"type":"string","default":"#ffffff"},"inputBorderColor":{"type":"string","default":"#000000"},"inputTextColor":{"type":"string","default":"#000000"},"buttonBackgroundColor":{"type":"string","default":"#000000"},"buttonBorderColor":{"type":"string","default":"#000000"},"buttonTextColor":{"type":"string","default":"#ffffff"},"uniqueId":{"type":"string","default":""},"campaignToken":{"type":"string","default":"fVRGY"},"inputLabel":{"type":"string","default":"E-mail"},"buttonLabel":{"type":"string","default":"Send"},"termsAndConditionsText":{"type":"string","default":"Acepto la política de privacidad y los términos de uso"},"destinationUrl":{"type":"string","default":""},"hasRowAlign":{"type":"boolean","default":"true"},"recaptchaKey":{"type":"string","default":""}}}');
 
 /***/ })
 

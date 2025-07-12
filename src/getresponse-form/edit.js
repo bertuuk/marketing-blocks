@@ -134,6 +134,12 @@ useEffect(() => {
 			initialOpen={true}
 			colorSettings={[
 				{
+				label: __("Input Label", "getresponse-form-block"),
+				value: attributes.inputLabelColor,
+				onChange: (color) => setAttributes({ inputLabelColor: color }),
+				
+				},
+				{
 				label: __("Input Background", "getresponse-form-block"),
 				value: attributes.inputBackgroundColor,
 				onChange: (color) => setAttributes({ inputBackgroundColor: color }),
@@ -247,13 +253,13 @@ useEffect(() => {
 				<div class="form-group form-group__first">
 					{/* Email input field (required) */}
 					<div class="form-field form-field__email alone-input-email hidden-label__field">
-						{inputLabel}:
+						<label style={{color: attributes.inputLabelColor}}>{inputLabel}</label>
 						<input style={{backgroundColor: attributes.inputBackgroundColor,color: attributes.inputTextColor, borderColor: attributes.inputBorderColor}} type="text" name="email" autocomplete="email"/>
 					</div>
 
 					{/* Submit button */}
 					<div class="form-field form-field__terms-conditions">
-						▢ {termsAndConditionsText}
+						▢ <label style={{color: attributes.inputLabelColor}}>{termsAndConditionsText}</label>
 					</div>
 					<div class="form-field form-field__submit-button">
 						<input style={{backgroundColor: attributes.buttonBackgroundColor,color: attributes.buttonTextColor, borderColor: attributes.buttonBorderColor}} class="g-recaptcha" data-callback='onSubmit' data-action='submit' data-id={uniqueId} data-sitekey={recaptchaKey} type="submit" value={buttonLabel || 'Enviar'} />

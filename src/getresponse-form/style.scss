@@ -4,15 +4,12 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-$color-primary: #E12F2F;
+
 $color-darkblue: #161d25;
-$color-black: #1F1F1F;
-$color-white: #ffffff;
-$color-grey-30: #F5F5F5;
-$color-grey-50: #E2E2E2;
-$color-grey-80: #484848;
-$color-error-dark: #ab0808;
-$color-error-light: #f8cdcf;
+$color-black: var(--wp--preset--color--black, #1F1F1F);
+$color-white: var(--wp--preset--color--white, #ffffff);
+$color-error-text: #ce0000;
+$color-error-background: #ffecec;
 $extraLargeDevices: 1140px;
 $largeDevices: 960px;
 $mediumDevices: 720px;
@@ -42,223 +39,185 @@ $smallDevices: 540px;
 .wp-block-create-block-getresponse-form-block {
 	color: $color-black;
 	padding: 2px;
-}
+		
+	.lead-mail-form {
+		display: flex;
+		justify-content: flex-start;
+		flex-direction: column;
+		.form-error-message {
+			padding: .5rem;
+			width: fit-content;
+			max-width: 100%;
+    		border-radius: 5px;
+			background-color: $color-error-background;
+			color: $color-error-text;
+			margin-top: .5rem;
+			white-space: pre-line;
+    		font-size: .9rem;
+		}
 
-.lead-mail-form {
-	display: flex;
-	justify-content: flex-start;
-	flex-direction: column;
-
-	.form-group {
+		.form-group {
 
 
-		.alone-input-email {
-			width: 100%;
-
-			input {
+			.alone-input-email {
 				width: 100%;
 
-			}
-		}
-
-		.hidden-label__field {
-			label {
-				@include visually-hidden;
-			}
-		}
-
-		input {
-			font-size: 1.2rem;
-			padding: .5rem;
-			background-color: transparent;
-			box-sizing: border-box;
-
-			&.error {
-				border: 1px solid $color-error-dark;
-			}
-
-			&[type="text"] {
-				border: 1px solid$color-black;
-			}
-
-			&[type="button"] {
-				background-color: $color-black;
-				text-transform: uppercase;
-				letter-spacing: .5px;
-				color: $color-white;
-				border: 1px solid $color-black;
-				font-weight: 700;
-				transition: all .2s;
-
-				&:hover {
-					background-color: $color-white;
-					color: $color-black;
-					border-color: $color-black;
+				input {
+					width: 100%;
 
 				}
+			}
 
-				&:focus {
-					outline: 2px solid $color-darkblue;
-					outline-offset: 2px;
+			.hidden-label__field {
+				label {
+					@include visually-hidden;
 				}
 			}
-		}
-
-		@media (min-width: $largeDevices) {
-
-			&.form-group__first {
-				max-width: 700px;
-			}
-
-
 
 			input {
-				font-size: 1rem;
+				font-size: 1.2rem;
+				padding: .5rem;
+				box-sizing: border-box;
 
-				&[type="text"] {
-					border: none;
-					border-bottom: 2px solid $color-black;
+				&.error:not([type="button"]) {
+					border: 2px solid $color-error-text!important;
+					
 				}
 
-				&[type="button"], &[type="button"] {
-					padding: .5rem 2rem;
-				}
-			}
-		}
-	}
-
-	.form-group__first {
-		display: grid;
-		grid-template-columns: 1fr;
-		/* Disposición en una sola columna para móviles */
-		gap: 10px 0;
-		/* Espaciado entre filas */
-	}
-
-	.form-field {
-		display: flex;
-		align-items: flex-start;
-
-	}
-
-	.form-field__hidden-fields {
-		display: none;
-	}
-
-	.form-field__submit-button {
-		input {
-			width: 100%;
-		}
-	}
-
-	.form-field__terms-conditions {
-		input {
-			margin-top: .2rem;
-
-		}
-
-		label {
-			color: $color-grey-80;
-			font-size: .9rem;
-			padding-left: .3em;
-		}
-	}
-
-	&[data-darktheme="false"] {
-		.form-group {
-			input {
 				&[type="text"] {
-					border: 1px solid $color-white;
+					border: 1px solid $color-black;
+					
 				}
 
 				&[type="button"] {
-					background-color: $color-white;
-					color: $color-black;
-					border: 1px solid $color-white;
+					text-transform: uppercase;
+					letter-spacing: .5px;
+					font-weight: 700;
+					transition: all .2s;
+					border-style: solid;
 
 					&:hover {
-						background-color: $color-black;
-						color: $color-white;
-						border-color: $color-white;
+						background-color: $color-white;
+						color: $color-black;
+						border-color: $color-black;
+
 					}
 
 					&:focus {
-						outline: 2px solid $color-white;
+						outline: 2px solid $color-darkblue;
+						outline-offset: 2px;
 					}
 				}
 			}
 
 			@media (min-width: $largeDevices) {
+
 				input {
+					font-size: 1rem;
+
 					&[type="text"] {
-						border-bottom: 2px solid $color-white;
+						border: none;
+						border-bottom: 2px solid $color-black;
+					}
+
+					&[type="button"], &[type="button"] {
+						padding: .5rem 2rem;
 					}
 				}
 			}
 		}
 
-		.form-field__terms-conditions {
-			label {
-				color: $color-grey-30;
-
-			}
-		}
-
-
-	}
-}
-
-
-
-
-/* Estilos para desktop */
-@media (min-width: $largeDevices) {
-	.lead-mail-form:not([data-rowalign="false"]) {
 		.form-group__first {
-			grid-template-columns: 1fr auto;
-			/* Dos columnas: input en la primera, botón en la segunda */
-			grid-template-rows: auto auto;
-			/* Dos filas */
+			display: grid;
+			grid-template-columns: 1fr;
+			/* Disposición en una sola columna para móviles */
+			gap: 10px 0;
+			/* Espaciado entre filas */
 		}
 
-		.form-field__email {
-			grid-column: 1 / 2;
-			/* El input de email ocupa la primera columna */
-			grid-row: 1 / 2;
-			/* Primera fila */
+		.form-field {
+			display: flex;
+			align-items: flex-start;
+
 		}
 
-		.form-field__terms-conditions {
-			grid-column: 1 / -1;
-			/* Checkbox ocupa ambas columnas */
-			grid-row: 2 / 3;
-			/* Segunda fila */
+		.form-field__hidden-fields {
+			display: none;
 		}
 
 		.form-field__submit-button {
-			grid-column: 2 / 3;
-			/* El botón de envío ocupa la segunda columna */
-			grid-row: 1 / 2;
-			/* Primera fila */
+			input {
+				width: 100%;
+			}
+		}
+
+		.form-field__terms-conditions {
+			input {
+				margin-top: .2rem;
+
+			}
+
+			label {
+				font-size: .9rem;
+				padding-left: .3em;
+			}
 		}
 	}
 
-}
 
-.lead-mail-form {
-	.form-error-message {
-		border: $color-error-dark;
-		background-color: $color-error-light;
-		color: $color-error-dark;
-		padding: .5rem;
-		width: fit-content;
-		max-width: 100%;
-		border-radius: 3px;
-	}
 
-	input {
-		&.error {
-			border-color: 1px solid $color-error-dark;
+
+	/* Estilos para desktop */
+	@media (min-width: $largeDevices) {
+		.lead-mail-form:not([data-rowalign="false"]) {
+			.form-group__first {
+				grid-template-columns: 1fr auto;
+				/* Dos columnas: input en la primera, botón en la segunda */
+				grid-template-rows: auto auto;
+				/* Dos filas */
+			}
+
+			.form-field__email {
+				grid-column: 1 / 2;
+				/* El input de email ocupa la primera columna */
+				grid-row: 1 / 2;
+				/* Primera fila */
+			}
+
+			.form-field__terms-conditions {
+				grid-column: 1 / -1;
+				/* Checkbox ocupa ambas columnas */
+				grid-row: 2 / 3;
+				/* Segunda fila */
+			}
+
+			.form-field__submit-button {
+				grid-column: 2 / 3;
+				/* El botón de envío ocupa la segunda columna */
+				grid-row: 1 / 2;
+				/* Primera fila */
+			}
 		}
+
+	}
+	&.is-style-filled-input{
+		.lead-mail-form{
+			.form-group{
+				input[type=text]{
+					border-width:1px;
+					border:solid;
+					border-radius:5px;
+					padding: 0.7rem;
+					font-size:1.1rem;
+				}
+				input[type=button]{
+					border-width:1px;
+					border:solid;
+					padding: 0.8rem 2rem 0.65rem;
+					border-radius:5px;
+				}
+			}
+		}
+		
 	}
 }
