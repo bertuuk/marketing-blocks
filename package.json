@@ -1,8 +1,8 @@
 {
-	"name": "bertuuk-marketing-blocks",
+	"name": "littledaisy-blocks",
 	"version": "0.1.0",
-	"description": "Custom Gutenberg blocks for marketing, focused on email integration with GetResponse.",
-	"author": "Berta nicolau",
+	"description": "Example block scaffolded with Create Block tool.",
+	"author": "The WordPress Contributors",
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
 	"scripts": {
@@ -15,9 +15,6 @@
 		"start": "wp-scripts start"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^30.19.0"
-	},
-	"dependencies": {
-		"tinycolor2": "^1.6.0"
+		"@wordpress/scripts": "^26.19.0"
 	}
 }
