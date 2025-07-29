@@ -14,7 +14,7 @@ function bmb_add_settings_page() {
 // Registra la configuració i el camp
 add_action( 'admin_init', 'bmb_register_settings' );
 function bmb_register_settings() {
-    register_setting( 'bmb_settings_group', 'bmb_recaptcha_site_key' );
+    register_setting( 'bmb_settings_group', 'bmb_recaptcha_secret_key' );
 
     add_settings_section(
         'bmb_main_section',
@@ -24,8 +24,8 @@ function bmb_register_settings() {
     );
 
     add_settings_field(
-        'bmb_recaptcha_site_key',
-        'Clau pública de reCAPTCHA',
+        'bmb_recaptcha_secret_key',
+        'Clau privada de reCAPTCHA',
         'bmb_render_site_key_field',
         'bmb-settings',
         'bmb_main_section'
@@ -34,8 +34,8 @@ function bmb_register_settings() {
 
 // Camp de text
 function bmb_render_site_key_field() {
-    $value = esc_attr( get_option( 'bmb_recaptcha_site_key', '' ) );
-    echo '<input type="text" name="bmb_recaptcha_site_key" value="' . $value . '" size="40">';
+    $value = esc_attr( get_option( 'bmb_recaptcha_secret_key', '' ) );
+    echo '<input type="text" name="bmb_recaptcha_secret_key" value="' . $value . '" size="40">';
 }
 
 // Renderitza la pàgina
