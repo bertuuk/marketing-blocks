@@ -5,7 +5,7 @@
  * Description: Custom Gutenberg blocks for marketing, including GetResponse forms.
  * Author: Berta Nicolau
  * Author URI: https://github.com/bertuuk
- * Version: 2.1.3
+ * Version: 2.1.4
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain: bertuuk-marketing-blocks
@@ -78,7 +78,7 @@ function validate_form_and_traps($request) {
  */
 function validate_recaptcha_token(WP_REST_Request $request) {
     $recaptcha_response = $request->get_param('token');
-    $recaptcha_secret = get_theme_mod( 'ld_recaptcha_key' );
+    $recaptcha_secret = get_option( 'bmb_recaptcha_secret_key' );
     if (empty($recaptcha_response)) {
         return new WP_REST_Response(['success' => false, 'reason' => 'Missing reCAPTCHA token.'], 400);
     }
