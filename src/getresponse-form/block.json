@@ -85,5 +85,16 @@
 			"type": "string",
 			"default": ""
 		}
-	}
+	},
+	"styles": [
+		{
+			"name": "default",
+			"label": "Default",
+			"isDefault": true
+		},
+		{
+			"name": "filled-input",
+			"label": "Filled input"
+		}
+	]
 }
