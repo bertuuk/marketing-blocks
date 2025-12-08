@@ -498,9 +498,7 @@ function save({
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("form", {
       class: "lead-mail-form",
       "data-rowalign": hasRowAlign,
-      action: "https://app.getresponse.com/add_subscriber.html",
-      "accept-charset": "utf-8",
-      method: "post",
+      onSubmit: e => e.preventDefault(),
       id: uniqueId,
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
         class: "form-group form-group__first",

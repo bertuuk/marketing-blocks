@@ -27,7 +27,7 @@ export default function save({ attributes }) {
 
 	return (
 		<div {...useBlockProps.save()}>
-			<form class="lead-mail-form" data-rowalign={hasRowAlign} action="https://app.getresponse.com/add_subscriber.html" accept-charset="utf-8" method="post" id={uniqueId}>
+			<form class="lead-mail-form" data-rowalign={hasRowAlign} onSubmit={(e) => e.preventDefault()} id={uniqueId}>
 				<div class="form-group form-group__first">
 					{/* Email input field (required) */}
 					<div class="form-field form-field__email-label" data-label={hasLabel}>
