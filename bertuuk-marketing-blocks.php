@@ -5,7 +5,7 @@
  * Description: Custom Gutenberg blocks for marketing, including GetResponse forms.
  * Author: Berta Nicolau
  * Author URI: https://github.com/bertuuk
- * Version: 2.1.4
+ * Version: 2.2.0
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain: bertuuk-marketing-blocks
@@ -108,26 +108,78 @@ function validate_recaptcha_token(WP_REST_Request $request) {
  * @param WP_REST_Request $request Request object.
  * @return WP_REST_Response Response object.
  */
-function validate_form_and_traps_request(WP_REST_Request $request) {
+function process_getresponse_subscription(WP_REST_Request $request) {
+    
+    // 1. VALIDACIÓ DE TRAMPES (Honeypot i temps)
+    // Reutilitzem la teva funció existent
     $errors = validate_form_and_traps($request);
     if (!empty($errors)) {
+        // Retornem èxit false perque el JS mostri l'error
         return new WP_REST_Response(['success' => false, 'reason' => implode(' ', $errors)], 200);
     }
-    return new WP_REST_Response(['success' => true], 200);
+
+    // 2. VALIDACIÓ DE RECAPTCHA
+    // Reutilitzem la teva funció existent
+    $recaptcha_result = validate_recaptcha_token($request);
+    
+    // Si validate_recaptcha_token retorna un WP_REST_Response (error 400), ho capturem
+    if (is_wp_error($recaptcha_result) || (is_a($recaptcha_result, 'WP_REST_Response'))) {
+         return new WP_REST_Response(['success' => false, 'reason' => 'Error de connexió amb Recaptcha.'], 200);
+    }
+    
+    // Si retorna l'array amb success false
+    if (isset($recaptcha_result['success']) && !$recaptcha_result['success']) {
+        return new WP_REST_Response($recaptcha_result, 200);
+    }
+
+    // 3. ENVIAMENT A GETRESPONSE (La màgia passa aquí)
+    // Preparem les dades tal com les espera GetResponse
+    $body = [
+        'email'              => $request->get_param('email'),
+        'campaign_token'     => $request->get_param('campaign_token'),
+        'start_day'          => '0', // Valor per defecte de GR
+        'name'               => $request->get_param('name'), // Si en tinguessis
+        'custom_url_seguimiento' => $request->get_param('custom_url_seguimiento')
+    ];
+
+    // URL on s'envien les dades (la que abans tenies al HTML)
+    $url_getresponse = 'https://app.getresponse.com/add_subscriber.html';
+
+    // Fem la petició POST des de WordPress
+    $response = wp_remote_post($url_getresponse, [
+        'method'      => 'POST',
+        'body'        => $body,
+        'timeout'     => 15,
+        'blocking'    => true,
+    ]);
+
+    // Comprovem si WordPress ha pogut connectar
+    if (is_wp_error($response)) {
+        return new WP_REST_Response(['success' => false, 'reason' => 'Error tècnic connectant amb el proveïdor de correu.'], 500);
+    }
+
+    // Opcional: Analitzar la resposta de GetResponse.
+    // Normalment si tot va bé, GR retorna un 200 o fa una redirecció.
+    $response_code = wp_remote_retrieve_response_code($response);
+
+    // Si tot ha anat bé, li diem al JS que faci la redirecció final
+    $thank_you_url = $request->get_param('thankyou_url');
+    
+    return new WP_REST_Response([
+        'success'      => true, 
+        'redirect_url' => $thank_you_url
+    ], 200);
 }
+
 /**
- * Registra las rutas de validación de campos/trampas y reCAPTCHA.
+ * Registra la NOVA ruta única.
+ * Substitueix les dues rutes antigues per aquesta sola.
  */
-function register_recaptcha_validation_endpoint() {
-    register_rest_route('custom/v1', '/validate-fields-and-traps', array(
+function register_marketing_blocks_endpoints() {
+    register_rest_route('custom/v1', '/process-subscription', array(
         'methods'  => 'POST',
-        'callback' => 'validate_form_and_traps_request',
-        'permission_callback' => '__return_true',
-    ));
-    register_rest_route('custom/v1', '/validate-recaptcha', array(
-        'methods'  => 'POST',
-        'callback' => 'validate_recaptcha_token',
-        'permission_callback' => '__return_true',
+        'callback' => 'process_getresponse_subscription',
+        'permission_callback' => '__return_true', 
     ));
 }
-add_action('rest_api_init', 'register_recaptcha_validation_endpoint');
+add_action('rest_api_init', 'register_marketing_blocks_endpoints');

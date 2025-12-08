@@ -12,7 +12,8 @@ function getTranslatedMessages() {
       suspiciousActivity: 'Se ha detectado actividad sospechosa. Inténtalo de nuevo.',
       formTooFast: 'Error. Espera unos segundos y vuelve a enviar el formulario.',
       recaptchaError: 'Error al validar el reCAPTCHA. Por favor, inténtalo de nuevo.',
-      validationError: 'Error al validar el envio del formulario'
+      validationError: 'Error al procesar la suscripción. Inténtalo más tarde.',
+      serverError: 'Error de conexión con el servidor.'
     },
     ca: {
       emailRequired: 'No oblidis omplir el camp e-mail.',
@@ -20,7 +21,8 @@ function getTranslatedMessages() {
       suspiciousActivity: 'S\'ha detectat activitat sospitosa. Torna-ho a intentar.',
       formTooFast: 'Error. Espera uns segons i torna a enviar el formulari.',
       recaptchaError: 'Error en validar el reCAPTCHA. Si us plau, torneu-ho a intentar.',
-      validationError: 'Error en validar l\'enviament del formulari'
+      validationError: 'Error en processar la subscripció. Prova-ho més tard.',
+      serverError: 'Error de connexió amb el servidor.'
     }
   };
   return messages[lang] || messages['es'];
@@ -51,47 +53,32 @@ function validateUserTraps(form) {
   }
   return errors;
 }
-async function validateFieldsAndTrapsOnServer(formData) {
+
+/**
+ * NOVA FUNCIÓ: Envia tot al servidor d'una sola vegada
+ * El servidor validarà i enviarà a GetResponse
+ */
+async function processSubscriptionOnServer(formDataJSON) {
   try {
-    const response = await fetch('/wp-json/custom/v1/validate-fields-and-traps', {
+    // Assegura't que la ruta coincideix amb la que has definit al PHP
+    const response = await fetch('/wp-json/custom/v1/process-subscription', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
+        // Si en el futur implementes nonce, aniria aquí: 'X-WP-Nonce': miVariableNonce
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formDataJSON)
     });
     if (!response.ok) {
-      throw new Error('Error en la solicitud: ' + response.statusText);
+      throw new Error('Error HTTP: ' + response.status);
     }
     const data = await response.json();
-    return data; // Devolver los datos completos de la respuesta
+    return data;
   } catch (error) {
+    console.error(error);
     return {
       success: false,
-      reason: messages.validationError
-    };
-  }
-}
-async function validateRecaptchaOnServer(token) {
-  try {
-    const response = await fetch('/wp-json/custom/v1/validate-recaptcha', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        token
-      })
-    });
-    if (!response.ok) {
-      throw new Error('Error en la solicitud: ' + response.statusText);
-    }
-    const data = await response.json();
-    return data; // Devolver los datos completos de la respuesta
-  } catch (error) {
-    return {
-      success: false,
-      reason: messages.recaptchaError
+      reason: messages.serverError
     };
   }
 }
@@ -101,7 +88,6 @@ function showError(message, form) {
     console.warn('No error region defined in form for accessibility.');
     return;
   }
-  // Crear un div para mostrar el mensaje de error
   let errorDiv = errorRegion.querySelector('.form-error-message');
   if (!errorDiv) {
     errorDiv = document.createElement('div');
@@ -109,8 +95,6 @@ function showError(message, form) {
     errorRegion.appendChild(errorDiv);
   }
   errorDiv.textContent = message;
-
-  // Agregar clase de error a los campos relevantes
   form.querySelectorAll('input').forEach(input => {
     input.classList.add('error');
   });
@@ -118,16 +102,12 @@ function showError(message, form) {
 function clearError(form) {
   let errorRegion = form.querySelector('.form-error-region');
   if (!errorRegion) {
-    console.warn('No error region defined in form for accessibility.');
     return;
   }
-  // Borrar el div con el mensaje de error si existe
   let errorDiv = errorRegion.querySelector('.form-error-message');
   if (errorDiv) {
     errorDiv.remove();
   }
-
-  // Remover clase de error de los campos relevantes
   form.querySelectorAll('input').forEach(input => {
     input.classList.remove('error');
   });
@@ -139,25 +119,24 @@ document.querySelectorAll('.g-recaptcha').forEach(button => {
     const sitekey = activeSubmitButton.getAttribute('data-sitekey');
     const uniqueId = activeSubmitButton.getAttribute('data-id');
     const form = document.getElementById(uniqueId);
-
-    // Inicializar errores
     let errors = [];
 
-    // Validar los campos del formulario
+    // Validar camps client-side
     errors = errors.concat(validateFormFields(form));
     if (errors.length > 0) {
       showError(errors.join('\n'), form);
       return;
     }
 
-    // Validar las trampas de usuario
+    // Validar trampes client-side (per estalviar peticions si és obvi)
     errors = errors.concat(validateUserTraps(form));
     if (errors.length > 0) {
       showError(errors.join(' '), form);
       return;
     }
-    clearError(form); // Borrar mensajes de error anteriores
-    // Si todas las validaciones anteriores pasan, ejecutar reCAPTCHA
+    clearError(form);
+
+    // Executar reCAPTCHA i cridar a onSubmit
     grecaptcha.execute(sitekey, {
       action: 'submit'
     }).then(function (token) {
@@ -170,50 +149,60 @@ window.onSubmit = function (token, activeSubmitButton, event) {
     const uniqueId = activeSubmitButton.getAttribute('data-id');
     const form = document.getElementById(uniqueId);
     if (form) {
+      // Lògica de l'URL de seguiment
       const pageName = window.location.pathname;
-      // Asignar el nombre de la página al campo oculto
       const pageNameInput = form.querySelector('input[name="custom_url_seguimiento"]');
       if (pageNameInput) {
         if (pageNameInput.value.includes('http')) {
           showError(messages.suspiciousActivity, form);
           return;
         } else {
-          pageNameInput.value = pageName; // Actualizamos el valor
+          pageNameInput.value = pageName;
         }
       }
-      // Validar campos del formulario y trampas
+
+      // Validacions finals abans d'enviar
       const errors = validateFormFields(form).concat(validateUserTraps(form));
       if (errors.length > 0) {
         showError(errors.join(' \n'), form);
-        return; // Evitar que se continúe si hay errores
+        return;
       }
-      const formData = new FormData(form);
-      formData.append('token', token);
 
-      // Convertir FormData a JSON
+      // Preparem les dades
+      const formData = new FormData(form);
       const formDataJSON = {};
       formData.forEach((value, key) => {
         formDataJSON[key] = value;
       });
-      validateFieldsAndTrapsOnServer(formDataJSON).then(response => {
+      // Afegim el token manualment al JSON
+      formDataJSON['token'] = token;
+
+      // Deshabilitem el botó per evitar doble click
+      activeSubmitButton.disabled = true;
+      activeSubmitButton.value = "Enviant..."; // O "Sending..."
+
+      // --- CANVI PRINCIPAL AQUÍ ---
+      // Cridem a la nova funció única
+      processSubscriptionOnServer(formDataJSON).then(response => {
         if (response.success) {
-          validateRecaptchaOnServer(token).then(response => {
-            if (response.success) {
-              form.submit();
-            } else {
-              showError(response.reason, form);
-            }
-          }).catch(() => {
-            showError(recaptchaError, form);
-          });
+          // SI ÉS CORRECTE: Redirecció manual
+          if (response.redirect_url) {
+            window.location.href = response.redirect_url;
+          } else {
+            // Fallback si no hi ha URL de gràcies definida
+            alert('Gràcies! Subscripció realitzada.');
+            form.reset();
+          }
         } else {
-          showError(messages.validationError, form);
+          // SI HI HA ERROR: Mostrem l'error que ve del PHP
+          activeSubmitButton.disabled = false;
+          activeSubmitButton.value = activeSubmitButton.getAttribute('value') || 'Enviar'; // Restaurar text
+          showError(response.reason || messages.validationError, form);
         }
       }).catch(() => {
+        activeSubmitButton.disabled = false;
         showError(messages.validationError, form);
       });
-
-      // Valida el token de reCAPTCHA en el servidor
     }
   }
 };
@@ -221,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.lead-mail-form').forEach(form => {
     const startTimeField = form.querySelector('input[name="start_time"]');
     if (startTimeField) {
-      startTimeField.value = Date.now(); // Establecer tiempo en milisegundos
+      startTimeField.value = Date.now();
     }
   });
 });
