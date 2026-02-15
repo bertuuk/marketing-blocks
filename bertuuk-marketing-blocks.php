@@ -5,7 +5,7 @@
  * Description: Custom Gutenberg blocks for marketing, including GetResponse forms.
  * Author: Berta Nicolau
  * Author URI: https://github.com/bertuuk
- * Version: 2.2.0
+ * Version: 2.2.1
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain: bertuuk-marketing-blocks
@@ -135,11 +135,11 @@ function process_getresponse_subscription(WP_REST_Request $request) {
     // 3. ENVIAMENT A GETRESPONSE (La màgia passa aquí)
     // Preparem les dades tal com les espera GetResponse
     $body = [
-        'email'              => $request->get_param('email'),
-        'campaign_token'     => $request->get_param('campaign_token'),
-        'start_day'          => '0', // Valor per defecte de GR
-        'name'               => $request->get_param('name'), // Si en tinguessis
-        'custom_url_seguimiento' => $request->get_param('custom_url_seguimiento')
+        'email'                  => sanitize_email( $request->get_param('email') ),
+        'campaign_token'         => sanitize_text_field( $request->get_param('campaign_token') ),
+        'start_day'              => '0',
+        'name'                   => sanitize_text_field( $request->get_param('name') ),
+        'custom_url_seguimiento' => sanitize_text_field( $request->get_param('custom_url_seguimiento') )
     ];
 
     // URL on s'envien les dades (la que abans tenies al HTML)
