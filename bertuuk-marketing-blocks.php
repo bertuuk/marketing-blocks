@@ -5,7 +5,7 @@
  * Description: Custom Gutenberg blocks for marketing, including GetResponse forms.
  * Author: Berta Nicolau
  * Author URI: https://github.com/bertuuk
- * Version: 2.2.1
+ * Version: 2.3.0
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain: bertuuk-marketing-blocks
