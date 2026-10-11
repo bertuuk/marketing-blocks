@@ -31,42 +31,24 @@ Custom Gutenberg blocks for marketing, focused on email integration with GetResp
 
 Yes. You need an active GetResponse account to use the form block.
 
-## 🚢 Releasing a new version
+## 🚢 Releases and updates
 
-Every version is published as a GitHub Release with a ready-to-install zip
-(already compiled, no `src/` or `node_modules/`):
+Each version is a GitHub Release with a ready-to-install zip, built by a GitHub
+Action when a `vX.Y.Z` tag is pushed. Sites install it from:
 
 ```
-https://github.com/bertuuk/marketing-blocks/releases/download/vX.Y.Z/bertuuk-marketing-blocks.zip
+https://github.com/bertuuk/marketing-blocks/releases/latest/download/bertuuk-marketing-blocks.zip
 ```
 
-The zip is built by `.github/workflows/release.yml` when a `vX.Y.Z` tag is pushed.
+and then update themselves from the WordPress dashboard (or automatically, with
+auto-updates on), like any plugin from wordpress.org.
 
-1. Update the version in **three places** (they must match or the release fails):
-   - `bertuuk-marketing-blocks.php` → `Version: X.Y.Z`
-   - `readme.txt` → `Stable tag: X.Y.Z` (and add a changelog entry)
-   - `package.json` → `"version": "X.Y.Z"` (then run `npm install` so `package-lock.json` follows)
-2. Commit the changes.
-3. Tag and push:
-   - **With git flow:** `git flow release start X.Y.Z` → bump versions → commit →
-     `git flow release finish X.Y.Z` → `git push origin main develop --tags`
-     (set `git config gitflow.prefix.versiontag v` once per clone so the tag is `vX.Y.Z`).
-   - **Without git flow:** `git tag vX.Y.Z` → `git push origin main --tags`
-4. Check the **Actions** tab on GitHub. When the run is green, the zip is under **Releases**.
+**To publish a version:** bump `Version` (plugin header), `Stable tag`
+(`readme.txt`) and `version` (`package.json`) to the same number, merge into
+`main`, tag `vX.Y.Z` and push the tag.
 
-The tagged commit must already contain `.github/workflows/release.yml`.
-
-### Updates on the sites
-
-The plugin updates itself from these releases (`includes/class-updater.php`, header
-`Update URI`). WordPress shows the usual update notice and, with auto-updates
-enabled, installs new versions on its own. For that to work, every release must:
-
-- be marked as **Latest** (not a pre-release or a draft);
-- carry the asset `bertuuk-marketing-blocks.zip` (the workflow does both).
-
-Sites check GitHub at most every 12 hours. **Dashboard → Updates → Check again**
-forces a new check.
+How it all works, the rules the sites depend on and what to check when
+something fails: **[RELEASING.md](RELEASING.md)**.
 
 ### Local development
 
