@@ -56,6 +56,18 @@ The zip is built by `.github/workflows/release.yml` when a `vX.Y.Z` tag is pushe
 
 The tagged commit must already contain `.github/workflows/release.yml`.
 
+### Updates on the sites
+
+The plugin updates itself from these releases (`includes/class-updater.php`, header
+`Update URI`). WordPress shows the usual update notice and, with auto-updates
+enabled, installs new versions on its own. For that to work, every release must:
+
+- be marked as **Latest** (not a pre-release or a draft);
+- carry the asset `bertuuk-marketing-blocks.zip` (the workflow does both).
+
+Sites check GitHub at most every 12 hours. **Dashboard → Updates → Check again**
+forces a new check.
+
 ### Local development
 
 `build/` is not in git. After cloning, run `npm install` and `npm run build`

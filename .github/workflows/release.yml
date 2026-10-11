@@ -72,4 +72,5 @@ jobs:
           gh release create "$GITHUB_REF_NAME" "$SLUG.zip" \
             --title "$GITHUB_REF_NAME" \
             --generate-notes \
+            --latest \
             --verify-tag

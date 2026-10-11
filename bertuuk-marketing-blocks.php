@@ -9,6 +9,7 @@
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain: bertuuk-marketing-blocks
+ * Update URI: https://github.com/bertuuk/marketing-blocks
  *
  * @package           create-block
  */
@@ -35,6 +36,10 @@ function bmb_load_textdomain() {
 add_action( 'init', 'bmb_load_textdomain' );
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/recaptcha-settings.php';
+
+// Updates from GitHub Releases (see includes/class-updater.php).
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-updater.php';
+new Bertuuk_GitHub_Updater( __FILE__, 'bertuuk/marketing-blocks' );
 
 /**
  * Valida los campos del formulario y las trampas de usuario.
