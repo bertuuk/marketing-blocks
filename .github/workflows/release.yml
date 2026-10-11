@@ -1,0 +1,75 @@
+# Builds the plugin and publishes it as a GitHub Release when a version tag
+# (e.g. v2.3.0) is pushed. Sites install it from:
+# https://github.com/bertuuk/marketing-blocks/releases/download/<tag>/bertuuk-marketing-blocks.zip
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: write
+
+env:
+  SLUG: bertuuk-marketing-blocks
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Check that every version matches the tag
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          HEADER=$(grep -m1 -E '^[[:space:]]*\*[[:space:]]*Version:' "$SLUG.php" | sed -E 's/.*Version:[[:space:]]*//' | tr -d '[:space:]')
+          STABLE=$(grep -m1 -E '^Stable tag:' readme.txt | sed -E 's/^Stable tag:[[:space:]]*//' | tr -d '[:space:]')
+          PACKAGE=$(node -p "require('./package.json').version")
+          echo "tag:            $TAG_VERSION"
+          echo "plugin header:  $HEADER"
+          echo "readme stable:  $STABLE"
+          echo "package.json:   $PACKAGE"
+          ok=1
+          [ "$HEADER"  = "$TAG_VERSION" ] || { echo "::error::Plugin header Version ($HEADER) does not match tag ($TAG_VERSION)"; ok=0; }
+          [ "$STABLE"  = "$TAG_VERSION" ] || { echo "::error::readme.txt Stable tag ($STABLE) does not match tag ($TAG_VERSION)"; ok=0; }
+          [ "$PACKAGE" = "$TAG_VERSION" ] || { echo "::error::package.json version ($PACKAGE) does not match tag ($TAG_VERSION)"; ok=0; }
+          [ "$ok" = 1 ]
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Create zip
+        run: npx wp-scripts plugin-zip
+
+      - name: Check zip contents
+        run: |
+          unzip -Z1 "$SLUG.zip"
+          if unzip -Z1 "$SLUG.zip" | grep -v "^$SLUG/"; then
+            echo "::error::Every file must be inside the $SLUG/ folder"; exit 1
+          fi
+          unzip -Z1 "$SLUG.zip" | grep -qx "$SLUG/$SLUG.php" || { echo "::error::Main plugin file missing"; exit 1; }
+          unzip -Z1 "$SLUG.zip" | grep -q "^$SLUG/build/" || { echo "::error::build/ missing"; exit 1; }
+          if unzip -Z1 "$SLUG.zip" | grep -E "/(src|node_modules)/|\.map$"; then
+            echo "::error::Development files found in the zip"; exit 1
+          fi
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "$SLUG.zip" \
+            --title "$GITHUB_REF_NAME" \
+            --generate-notes \
+            --verify-tag

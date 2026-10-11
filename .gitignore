@@ -80,3 +80,9 @@ node_modules/
 
 # vscode
 .vscode
+
+# Compiled assets: shipped inside the release zip, not in git
+/build/
+
+# macOS
+.DS_Store

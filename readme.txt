@@ -4,7 +4,7 @@ Tags: gutenberg, blocks, getresponse, marketing, email
 Requires at least: 6.0
 Tested up to: 6.5
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 2.3.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +29,10 @@ Yes. You need an active GetResponse account to use the form block.
 2. Example of a form embedded on a page.
 
 == Changelog ==
+
+= 2.3.0 =
+* New "Embedded button" style for the GetResponse form block.
+* Hardened validation of form submissions.
 
 = 1.0.0 =
 * Initial release. Includes GetResponse Form block.
