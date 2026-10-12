@@ -85,8 +85,18 @@ async function processSubscriptionOnServer(formDataJSON) {
         return data; 
     } catch (error) {
         console.error(error);
-        return { success: false, reason: messages.serverError };
+        return { success: false, codes: ['serverError'] };
     }
+}
+
+/**
+ * Message for a failed server response. The server sends error codes that
+ * match the keys of `messages`; anything unknown gets the generic message.
+ */
+function getServerErrorMessage(response) {
+    const codes = Array.isArray(response.codes) ? response.codes : [];
+    const texts = codes.map(code => messages[code]).filter(Boolean);
+    return texts.length ? texts.join(' ') : messages.validationError;
 }
 
 function showError(message, form) {
@@ -217,10 +227,10 @@ window.onSubmit = function (token, activeSubmitButton, event) {
                         form.reset();
                     }
                 } else {
-                    // SI HI HA ERROR: Mostrem l'error que ve del PHP
+                    // SI HI HA ERROR: el PHP envia codis; mostrem el missatge de cada codi en l'idioma de la pàgina
                     activeSubmitButton.disabled = false;
                     activeSubmitButton.value = activeSubmitButton.getAttribute('value') || 'Enviar'; // Restaurar text
-                    showError(response.reason || messages.validationError, form);
+                    showError(getServerErrorMessage(response), form);
                 }
             }).catch(() => {
                 activeSubmitButton.disabled = false;

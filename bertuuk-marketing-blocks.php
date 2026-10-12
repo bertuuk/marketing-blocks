@@ -42,35 +42,34 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/class-updater.php';
 new Bertuuk_GitHub_Updater( __FILE__, 'bertuuk/marketing-blocks' );
 
 /**
- * Valida los campos del formulario y las trampas de usuario.
+ * Checks the form fields and the bot traps.
+ *
+ * Returns error codes, not texts: view.js turns each code into a message in
+ * the page's language (see getTranslatedMessages()).
  *
  * @param WP_REST_Request $request Request object.
- * @return array Resultado de la validación.
+ * @return string[] Error codes, empty when everything is fine.
  */
 function validate_form_and_traps($request) {
     $honeypot = $request->get_param('user_comment');
-    $start_time = $request->get_param('start_time');
-    $current_time = time() * 1000;;
+    $start_time = (int) $request->get_param('start_time');
+    $current_time = time() * 1000;
     $errors = [];
 
     if (!empty($honeypot)) {
-        $errors[] = 'Se detectó actividad sospechosa.';
+        $errors[] = 'suspiciousActivity';
     }
 
     if (($current_time - $start_time) < 5000) {
-        $errors[] = ' current: ' . $current_time . ' start: ' . $start_time . ' = ' . $current_time - $start_time . 'El formulario se completó demasiado rápido.';
+        $errors[] = 'formTooFast';
     }
 
-    // Validar el campo de email
-    $email = $request->get_param('email');
-    if (empty($email)) {
-        $errors[] = 'No olvides llenar el campo e-mail.';
+    if (empty($request->get_param('email'))) {
+        $errors[] = 'emailRequired';
     }
 
-    // Validar términos y condiciones
-    $terms_and_conditions = $request->get_param('terms-and-conditions');
-    if (empty($terms_and_conditions)) {
-        $errors[] = 'Si no aceptas los términos y condiciones no podremos seguir en contacto.';
+    if (empty($request->get_param('terms-and-conditions'))) {
+        $errors[] = 'termsRequired';
     }
 
     return $errors;
@@ -119,8 +118,8 @@ function process_getresponse_subscription(WP_REST_Request $request) {
     // Reutilitzem la teva funció existent
     $errors = validate_form_and_traps($request);
     if (!empty($errors)) {
-        // Retornem èxit false perque el JS mostri l'error
-        return new WP_REST_Response(['success' => false, 'reason' => implode(' ', $errors)], 200);
+        // view.js shows the message for each code in the page's language.
+        return new WP_REST_Response(['success' => false, 'codes' => $errors], 200);
     }
 
     // 2. VALIDACIÓ DE RECAPTCHA
@@ -129,12 +128,12 @@ function process_getresponse_subscription(WP_REST_Request $request) {
     
     // Si validate_recaptcha_token retorna un WP_REST_Response (error 400), ho capturem
     if (is_wp_error($recaptcha_result) || (is_a($recaptcha_result, 'WP_REST_Response'))) {
-         return new WP_REST_Response(['success' => false, 'reason' => 'Error de connexió amb Recaptcha.'], 200);
+         return new WP_REST_Response(['success' => false, 'codes' => ['recaptchaError']], 200);
     }
     
     // Si retorna l'array amb success false
     if (isset($recaptcha_result['success']) && !$recaptcha_result['success']) {
-        return new WP_REST_Response($recaptcha_result, 200);
+        return new WP_REST_Response(['success' => false, 'codes' => ['recaptchaError']], 200);
     }
 
     // 3. ENVIAMENT A GETRESPONSE (La màgia passa aquí)
@@ -160,7 +159,7 @@ function process_getresponse_subscription(WP_REST_Request $request) {
 
     // Comprovem si WordPress ha pogut connectar
     if (is_wp_error($response)) {
-        return new WP_REST_Response(['success' => false, 'reason' => 'Error tècnic connectant amb el proveïdor de correu.'], 500);
+        return new WP_REST_Response(['success' => false, 'codes' => ['serverError']], 500);
     }
 
     // Opcional: Analitzar la resposta de GetResponse.
