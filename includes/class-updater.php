@@ -152,6 +152,9 @@ if ( ! class_exists( 'Bertuuk_GitHub_Updater' ) ) {
 			}
 
 			$changelog = $release['changelog'] ? wp_kses_post( $release['changelog'] ) : '';
+			// GitHub's notes use <h2> ("What's Changed"); in this window WordPress gives
+			// h2 "clear: both", which pushes it below the sidebar. Use h5 under the version's h4.
+			$changelog = preg_replace( '#<(/?)h[1-4](\s|>)#i', '<$1h5$2', $changelog );
 			$changelog = sprintf(
 				'<h4>%1$s</h4>%2$s<p><a href="%3$s">%3$s</a></p>',
 				esc_html( $release['version'] ),
