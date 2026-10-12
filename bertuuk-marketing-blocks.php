@@ -5,7 +5,7 @@
  * Description: Custom Gutenberg blocks for marketing, including GetResponse forms.
  * Author: Berta Nicolau
  * Author URI: https://github.com/bertuuk
- * Version: 2.3.0
+ * Version: 2.4.0
  * Requires at least: 6.3
  * Requires PHP: 7.4
  * License: GPL2+

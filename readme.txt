@@ -4,7 +4,7 @@ Tags: gutenberg, blocks, getresponse, marketing, email
 Requires at least: 6.3
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.3.0
+Stable tag: 2.4.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +29,14 @@ Yes. You need an active GetResponse account to use the form block.
 2. Example of a form embedded on a page.
 
 == Changelog ==
+
+= 2.4.0 =
+* Updates from GitHub: WordPress shows new versions in the dashboard and can install them automatically.
+* The form keeps its id: opening a post no longer marks it as modified.
+* Each submit button sends its own form, even with several forms on the same page.
+* Visible keyboard focus on the terms checkbox.
+* Server errors are shown in the page's language, without internal data.
+* Requires WordPress 6.3 and PHP 7.4.
 
 = 2.3.0 =
 * New "Embedded button" style for the GetResponse form block.
