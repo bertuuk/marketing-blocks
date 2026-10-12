@@ -13,8 +13,8 @@ import { __ } from '@wordpress/i18n';
  */
 import { useBlockProps, InspectorControls, PanelColorSettings } from '@wordpress/block-editor';
 
-import { useInstanceId } from '@wordpress/compose';
 import { useEffect } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 
 /**
  * Importing additional components for the InspectorControls
@@ -46,19 +46,42 @@ import { getReadableTextColor, isDarkColor } from '../utils/colors';
  * @param {Object} props - Props for the block.
  * @return {Element} Element to render.
  */
-export default function Edit({ attributes, setAttributes }) {
-	const instanceId = useInstanceId(Edit);
-	const { uniqueId } = 'attributes';
+export default function Edit({ attributes, setAttributes, clientId, name }) {
+	const { uniqueId } = attributes;
 
-	// Genera un número aleatorio entre 0 y 1000000
-	const randomNumber = Math.floor(Math.random() * 1000000);
+	/*
+	 * uniqueId links each submit button with its form (data-id → form id) and
+	 * gives the inputs unique ids for their labels, so several forms can live
+	 * on the same page. It is created once and then kept: it only changes when
+	 * it is empty (new block) or when another form earlier in the same content
+	 * already uses it (duplicated block, copy and paste, pattern inserted twice).
+	 */
+	const isDuplicate = useSelect(
+		(select) => {
+			if (!uniqueId) {
+				return false;
+			}
+			const { getClientIdsWithDescendants, getBlockName, getBlockAttributes } = select('core/block-editor');
+			for (const id of getClientIdsWithDescendants()) {
+				if (id === clientId) {
+					return false;
+				}
+				if (getBlockName(id) === name && getBlockAttributes(id)?.uniqueId === uniqueId) {
+					return true;
+				}
+			}
+			return false;
+		},
+		[uniqueId, clientId, name]
+	);
 
 	useEffect(() => {
-		if (!uniqueId) {
-			// Asigna un ID único basado en uniqueInstanceId
-			setAttributes({ uniqueId: `getresponse-form-${instanceId}-${randomNumber}` });
+		if (!uniqueId || isDuplicate) {
+			const random = Math.random().toString(36).slice(2, 10);
+			setAttributes({ uniqueId: `getresponse-form-${random}` });
 		}
-	}, [uniqueId, setAttributes]);
+	}, [uniqueId, isDuplicate, setAttributes]);
+
 	// Extracting attributes and setAttributes function from props
 	// preventRedirect, confirmationMessage, destinationUrl		
 	const { campaignToken, inputLabel, buttonLabel, destinationUrl, termsAndConditionsText, hasRowAlign, RowAlign, hasLabel, recaptchaKey, isDarkInput } = attributes;
