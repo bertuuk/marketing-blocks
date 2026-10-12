@@ -6,6 +6,8 @@
  * Author: Berta Nicolau
  * Author URI: https://github.com/bertuuk
  * Version: 2.3.0
+ * Requires at least: 6.3
+ * Requires PHP: 7.4
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain: bertuuk-marketing-blocks
