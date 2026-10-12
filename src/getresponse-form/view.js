@@ -122,13 +122,24 @@ function clearError(form) {
     });
 }
 
+/**
+ * The form a submit button belongs to. The button sits inside its form, so this
+ * works even if two forms on the page ended up with the same id; data-id is
+ * only a fallback for older markup.
+ */
+function getButtonForm(button) {
+    return button.closest('form') || document.getElementById(button.getAttribute('data-id'));
+}
+
 document.querySelectorAll('.g-recaptcha').forEach(button => {
     button.addEventListener('click', function (event) {
         event.preventDefault();
         const activeSubmitButton = this;
         const sitekey = activeSubmitButton.getAttribute('data-sitekey');
-        const uniqueId = activeSubmitButton.getAttribute('data-id');
-        const form = document.getElementById(uniqueId);
+        const form = getButtonForm(activeSubmitButton);
+        if (!form) {
+            return;
+        }
 
         let errors = [];
 
@@ -158,9 +169,8 @@ document.querySelectorAll('.g-recaptcha').forEach(button => {
 window.onSubmit = function (token, activeSubmitButton, event) {
     
     if (activeSubmitButton) {
-        const uniqueId = activeSubmitButton.getAttribute('data-id');
-        const form = document.getElementById(uniqueId);
-        
+        const form = getButtonForm(activeSubmitButton);
+
         if (form) {
             // Lògica de l'URL de seguiment
             const pageName = window.location.pathname;
