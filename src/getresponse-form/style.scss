@@ -149,6 +149,12 @@ $smallDevices: 540px;
 					opacity: 0;
 					pointer-events: none;
 
+					// The real checkbox is invisible: show keyboard focus on the drawn box.
+					&:focus-visible+.dahlia-checkbox-label .dahlia-checkbox-box {
+						outline: 2px solid currentcolor;
+						outline-offset: 2px;
+					}
+
 					&:checked+.dahlia-checkbox-label .dahlia-checkbox-box {
 						background-color: var(--wp--preset--color--primary);
 						border-color: var(--wp--preset--color--primary);

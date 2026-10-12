@@ -85,8 +85,18 @@ async function processSubscriptionOnServer(formDataJSON) {
         return data; 
     } catch (error) {
         console.error(error);
-        return { success: false, reason: messages.serverError };
+        return { success: false, codes: ['serverError'] };
     }
+}
+
+/**
+ * Message for a failed server response. The server sends error codes that
+ * match the keys of `messages`; anything unknown gets the generic message.
+ */
+function getServerErrorMessage(response) {
+    const codes = Array.isArray(response.codes) ? response.codes : [];
+    const texts = codes.map(code => messages[code]).filter(Boolean);
+    return texts.length ? texts.join(' ') : messages.validationError;
 }
 
 function showError(message, form) {
@@ -122,13 +132,24 @@ function clearError(form) {
     });
 }
 
+/**
+ * The form a submit button belongs to. The button sits inside its form, so this
+ * works even if two forms on the page ended up with the same id; data-id is
+ * only a fallback for older markup.
+ */
+function getButtonForm(button) {
+    return button.closest('form') || document.getElementById(button.getAttribute('data-id'));
+}
+
 document.querySelectorAll('.g-recaptcha').forEach(button => {
     button.addEventListener('click', function (event) {
         event.preventDefault();
         const activeSubmitButton = this;
         const sitekey = activeSubmitButton.getAttribute('data-sitekey');
-        const uniqueId = activeSubmitButton.getAttribute('data-id');
-        const form = document.getElementById(uniqueId);
+        const form = getButtonForm(activeSubmitButton);
+        if (!form) {
+            return;
+        }
 
         let errors = [];
 
@@ -158,9 +179,8 @@ document.querySelectorAll('.g-recaptcha').forEach(button => {
 window.onSubmit = function (token, activeSubmitButton, event) {
     
     if (activeSubmitButton) {
-        const uniqueId = activeSubmitButton.getAttribute('data-id');
-        const form = document.getElementById(uniqueId);
-        
+        const form = getButtonForm(activeSubmitButton);
+
         if (form) {
             // Lògica de l'URL de seguiment
             const pageName = window.location.pathname;
@@ -207,10 +227,10 @@ window.onSubmit = function (token, activeSubmitButton, event) {
                         form.reset();
                     }
                 } else {
-                    // SI HI HA ERROR: Mostrem l'error que ve del PHP
+                    // SI HI HA ERROR: el PHP envia codis; mostrem el missatge de cada codi en l'idioma de la pàgina
                     activeSubmitButton.disabled = false;
                     activeSubmitButton.value = activeSubmitButton.getAttribute('value') || 'Enviar'; // Restaurar text
-                    showError(response.reason || messages.validationError, form);
+                    showError(getServerErrorMessage(response), form);
                 }
             }).catch(() => {
                 activeSubmitButton.disabled = false;
