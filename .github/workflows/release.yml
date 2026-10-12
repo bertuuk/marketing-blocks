@@ -20,12 +20,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Check that every version matches the tag
@@ -34,14 +34,18 @@ jobs:
           HEADER=$(grep -m1 -E '^[[:space:]]*\*[[:space:]]*Version:' "$SLUG.php" | sed -E 's/.*Version:[[:space:]]*//' | tr -d '[:space:]')
           STABLE=$(grep -m1 -E '^Stable tag:' readme.txt | sed -E 's/^Stable tag:[[:space:]]*//' | tr -d '[:space:]')
           PACKAGE=$(node -p "require('./package.json').version")
+          # block.json's version is the ?ver= of the block's CSS: it must change with every release so browsers drop the old file.
+          BLOCK=$(node -p "require('./src/getresponse-form/block.json').version")
           echo "tag:            $TAG_VERSION"
           echo "plugin header:  $HEADER"
           echo "readme stable:  $STABLE"
           echo "package.json:   $PACKAGE"
+          echo "block.json:     $BLOCK"
           ok=1
           [ "$HEADER"  = "$TAG_VERSION" ] || { echo "::error::Plugin header Version ($HEADER) does not match tag ($TAG_VERSION)"; ok=0; }
           [ "$STABLE"  = "$TAG_VERSION" ] || { echo "::error::readme.txt Stable tag ($STABLE) does not match tag ($TAG_VERSION)"; ok=0; }
           [ "$PACKAGE" = "$TAG_VERSION" ] || { echo "::error::package.json version ($PACKAGE) does not match tag ($TAG_VERSION)"; ok=0; }
+          [ "$BLOCK"   = "$TAG_VERSION" ] || { echo "::error::src/getresponse-form/block.json version ($BLOCK) does not match tag ($TAG_VERSION)"; ok=0; }
           [ "$ok" = 1 ]
 
       - name: Install dependencies

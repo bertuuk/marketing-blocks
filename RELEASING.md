@@ -38,6 +38,8 @@ it. It does, in order:
    - `Version:` in `bertuuk-marketing-blocks.php`
    - `Stable tag:` in `readme.txt`
    - `"version"` in `package.json`
+   - `"version"` in `src/getresponse-form/block.json` (it is the `?ver=` of
+     the block's CSS, so browsers and caches fetch the new file)
 
    If any of them differs, the run stops here and nothing is published.
 2. **Build:** `npm ci` and `npm run build`, the same as locally.
@@ -55,7 +57,7 @@ the run to see which step failed and why).
 ## 2. Releasing a new version
 
 1. Make sure `develop` has everything that should go in.
-2. Bump the version in the three places above and add a `readme.txt`
+2. Bump the version in the four places above and add a `readme.txt`
    changelog entry. Run `npm install` so `package-lock.json` picks up the new
    version.
 3. Commit, merge into `main` and tag `main`:
@@ -127,7 +129,7 @@ The sites depend on these. Changing any of them means changing the deploys too.
 
 **The Action is red**
 
-- *Check that every version matches the tag*: one of the three versions wasn't
+- *Check that every version matches the tag*: one of the four versions wasn't
   bumped. Fix it, commit, delete the tag (`git tag -d vX.Y.Z` and
   `git push origin :refs/tags/vX.Y.Z`) and tag again.
 - *Install dependencies*: `package.json` and `package-lock.json` disagree.

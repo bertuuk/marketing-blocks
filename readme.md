@@ -44,7 +44,8 @@ and then update themselves from the WordPress dashboard (or automatically, with
 auto-updates on), like any plugin from wordpress.org.
 
 **To publish a version:** bump `Version` (plugin header), `Stable tag`
-(`readme.txt`) and `version` (`package.json`) to the same number, merge into
+(`readme.txt`), `version` (`package.json`) and `version`
+(`src/getresponse-form/block.json`) to the same number, merge into
 `main`, tag `vX.Y.Z` and push the tag.
 
 How it all works, the rules the sites depend on and what to check when
